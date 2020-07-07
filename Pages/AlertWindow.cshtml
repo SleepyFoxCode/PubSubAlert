@@ -1,0 +1,161 @@
+@page
+@model AlertWindowModel
+@{
+    ViewData["Title"] = "AlertWindow";
+    Layout = "";    // We set layout empty so the _layout file will not be loaded
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AlertWindow</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-plugins/js.cookie-2.2.1.min.js"></script>
+    <link rel="stylesheet" href="~/css/alertwindow.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&&display=swap" rel="stylesheet">
+
+</head>
+<body>
+@Html.AntiForgeryToken()
+    <div id="main">
+        <div id="alert">
+            <img class="alert_image" src="@Model.alertSettings.url"/>
+            <label id="alert_username" style="margin-top:1em;color:@Model.alertSettings.font_color_username; font-size:@Model.alertSettings.font_size_username; font-family:@Model.alertSettings.font_family;"></label>
+            <label id="alert_costs" style="color:@Model.alertSettings.font_color_costs; font-size:@Model.alertSettings.font_size_costs; font-family:@Model.alertSettings.font_family;"></label>
+            <label id="alert_title" style="font-weight:bold;font-size:@Model.alertSettings.font_size_title; color:@Model.alertSettings.font_color_title; font-family:@Model.alertSettings.font_family;"></label>
+            <label id="alert_msg" style="color:@Model.alertSettings.font_color_msg; font-size:@Model.alertSettings.font_size_msg; font-family:@Model.alertSettings.font_family;"></label>            
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+<script language="javascript" type="text/javascript">
+// Object that we use to store the current object to update the alert in the html documnent when an alert occurs
+var alert_obj ={
+    title: null,
+    msg: null,
+    cost: 0,
+    img: null,
+    default_img: null,
+    user: null
+}
+
+// Array to store all events that needs to be played. Event that was played will be removed
+var pub_sub_queue = [];
+// To check if an alert is currently playing. If yes, the function will be skipped
+var alert_playing = false;
+
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
+var checkInterval = setInterval(function(){
+  checkForPubSubEvents()
+}, 10000);
+
+// We check if events are in the queue. If yes, [0] will be played and removed
+var alertInterval = setInterval(function(){
+    if(pub_sub_queue.length > 0 && alert_playing != true){
+        alert_playing = true;
+        pubSubAlert()
+    }
+}, 5000);
+
+// Update the object to the current alert. It also calls the function to finally show it
+function pubSubAlert(){
+            //Clear last object
+            alert_obj.title = null;
+            alert_obj.cost = null;
+            alert_obj.img = null;
+            alert_obj.default_img = null;
+            alert_obj.msg = null;
+            alert_obj.user = null;
+            //Setup object
+            alert_obj.title = pub_sub_queue[0].title;
+            alert_obj.cost = pub_sub_queue[0].cost;
+            alert_obj.img = pub_sub_queue[0].image;
+            alert_obj.default_img = pub_sub_queue[0].default_image;
+            alert_obj.msg = pub_sub_queue[0].user_input;
+            alert_obj.user = pub_sub_queue[0].display_name;
+
+            showAlert();
+            // Remove alert from queue because it played
+            pub_sub_queue.shift();
+}
+
+// Function to show
+function showAlert(){
+    document.getElementById("alert_title").innerHTML = "<b>" + alert_obj.title + "</b>"
+
+    // It's possible that message is empty so we check it
+    if(alert_obj.msg != null){
+        document.getElementById("alert_msg").innerHTML = "<b>" + '"' + alert_obj.msg + '"' + "<b>"
+    }
+    else document.getElementById("alert_msg").innerHTML = ""
+    
+    // Append because innerHTML would clear the img tag
+    document.getElementById("alert_costs").innerHTML = "<b>" + alert_obj.cost + "</b>"
+
+    var img = document.createElement("img")
+    img.style.fontSize = "@Model.alertSettings.font_size_costs"
+
+    
+    // Image for that cost icon is either the default from Twitch or a custom from the channel
+    if(alert_obj.img == null){
+        img.setAttribute("src", alert_obj.default_img)
+    }
+    else {
+        img.setAttribute("src", alert_obj.img)
+    }
+    document.getElementById("alert_costs").appendChild(img)
+
+    document.getElementById("alert_username").innerHTML = "<b>" + alert_obj.user + " has spent " + "</b>"
+
+    // Alert Audio to play. Currently doesn't work in OBS (Chromium)
+    var audio = new Audio("resources\\sounds\\" + "@Model.alertSettings.sound" + ".wav")
+    audio.volume = @Model.alertSettings.volume
+    audio.play()
+
+    // We want the alert to be a flex box. This is a workaround so the Query function doesn't change display:flex to display:block
+    jQuery(function(){
+        $('#alert')
+        .css("display", "flex")
+        .hide()
+        .fadeIn(1000);
+    })
+
+    // Fadeout the alert from the value the client chose. alert_playing is now false again so next alert can play
+    setTimeout(function(){ 
+        jQuery(function(){
+            alert_playing = false;
+            $('#alert').fadeOut(1000);
+        }) 
+    }, @Model.alertSettings.duration * 1000);
+}
+
+
+
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
+function checkForPubSubEvents() {
+    $.ajax({
+            type: "POST",
+            url: '/alertwindow?handler=GetNewPubSubs&id=@Model.id', 
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XSRF-TOKEN",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+            success: function(data){
+                if(data == "Error") {
+                    return;
+                }
+                json = JSON.parse(data)
+                for(var i = 0; i < json.length; i++){
+                    pub_sub_queue.push(json[i]);
+                }
+            }
+    })
+}
+ </script>

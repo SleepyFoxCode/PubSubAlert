@@ -1,0 +1,44 @@
+#main {
+    background-color: rgb(0, 255, 0);
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.alert_image{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 400px;
+    max-height: 300px;
+}
+
+#alert {
+    margin-right: auto;
+    margin-left: auto;
+    width: max-content;
+    text-align: center;
+    margin-top: 3em;
+    display: none;
+    flex-direction: column;
+}
+
+#alert_title{
+    word-break: break-all;
+    max-width: 400px;
+}
+
+#alert_msg{
+    max-width: 400px;
+    word-break: break-all;
+    font-style: italic;
+}
+
+#alert_costs{
+
+}
+
+#alert_costs img{
+    
+}

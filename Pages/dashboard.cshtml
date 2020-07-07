@@ -1,0 +1,435 @@
+@page
+@model DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<link rel="stylesheet" href="~/css/dashboard.css"/>
+
+
+@Html.AntiForgeryToken()
+<div id="main_container" class="col-md-12">
+    <div id="welcome_container">
+        <h1>Welcome @Model.user.information.display_name!</h1>
+        <p>
+            This page enables you to see all incoming redemptions on your channel. <br>
+            Try it out by redeeming something to yourself! <br>
+            <br>
+            The Alert Window is indepetend from this site. So if you want you can close the dashboard and just have 
+            the Alert Window open. You also can just copy the URL from the Alert Window and use it as an OBS Browser Source 
+            <br>
+            <br>
+            <b>Only have one Alert Window open. Either in OBS (Browser Source) or in your browser. Or else the wrong window could be in focus.</b>
+        </p>
+    </div>
+    <hr/>
+    <div id="pub_sub_container" class="col-md-12">
+        <button type="button" class="btn btn-primary" id="openAlertWindow">Open Alert Window</button>
+        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#pub_sub_alert_setting_container" aria-expanded="false" aria-controls="pub_sub_alert_setting_container">Settings</button>
+        <div id="pub_sub_alert_setting_container" class="collapse">
+            <div class="" style="display: flex;">
+                <label>Duration</label>
+                <input id="slider_alert_duration" class="" type="range" min="5" max="20" />
+                <label class="durationLabel" style="margin-left: 0.3em"></label>
+            </div>
+            <div>
+                <label>Image</label>
+                <input type="text" id="image_alert_url" placeholder="URL" value="" />
+                <span style="margin-left: 1em;color:#7e8892;">It's important to use a direct link to an image or gif</span>
+            </div>
+            <div class="">
+                <label>Alert Sound</label>
+                <select id="sound_alert_selection">
+                    <option style="">1</option>
+                    <option style="">2</option>
+                </select>
+                <button type="button" id="sound_selection_button">Play</button>
+            </div>
+            <div class="" style="display: flex;">
+                <label>Sound Volume</label>
+                <input id="slider_sound_volume" class="" type="range" min="1" max="100" value="50" />
+                <label class="sound_volume_label" style="margin-left: 0.3em"></label>
+            </div>
+            <div class="">
+                <label>Font-Family</label>
+                <select id="fontfamily_alert_selection">
+                    <option style="font-family:roboto">Roboto</option>
+                    <option style="font-family:bangers">Bangers</option>
+                    <option style="font-family:Arial">Arial</option>
+                    <option style="font-family:Comic Sans MS">Comic Sans MS</option>
+                    <option style="font-family:Impact">Impact</option>
+                    <option style="font-family:Tahoma">Tahoma</option>
+                    <option style="font-family:Verdana">Verdana</option>
+                    <option style="font-family:Times New Roman">Times New Roman</option>
+                    <option style="font-family:Helvetica">Helvetica</option>
+                    <option style="font-family:Courier New">Courier New</option>
+                    <option style="font-family:Calibri">Calibri</option>
+                    <option style="font-family:Monaco">Monaco</option>
+                    <option style="font-family:Brush Script MT">Brush Script MT</option>
+                </select>
+            </div>
+            <div class="" style="display: flex;">
+                <label>Font-Size Title</label>
+                <input id="slider_font_size_title" class="" type="range" min="1" max="10" value="1" />
+                <label class="font_size_title_label" style="margin-left: 0.3em"></label>
+                <span style="margin-left: 1em;color:#7e8892;"> 1 is the font size of <b>this</b> text</span>
+            </div>
+            <div class="" style="display: flex;">
+                <label>Font-Size Costs</label>
+                <input id="slider_font_size_costs" class="" type="range" min="1" max="10" value="1" />
+                <label class="font_size_costs_label" style="margin-left: 0.3em"></label>
+            </div>
+            <div class="" style="display: flex;">
+                <label>Font-Size Username</label>
+                <input id="slider_font_size_username" class="" type="range" min="1" max="10" value="1" />
+                <label class="font_size_username_label" style="margin-left: 0.3em"></label>
+            </div>
+            <div class="" style="display: flex;">
+                <label>Font-Size Message</label>
+                <input id="slider_font_size_msg" class="" type="range" min="1" max="10" value="1" />
+                <label class="font_size_msg_label" style="margin-left: 0.3em"></label>
+            </div>
+            <div>
+                <label>Font-Color Title</label>
+                <input type="text" id="fontcolor_alert_title" placeholder="#FFFFFF"value="#212529" />
+                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
+            </div>
+            <div>
+                <label>Font-Color Costs</label>
+                <input type="text" id="fontcolor_alert_costs" placeholder="#FFFFFF"value="#212529" />
+                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
+            </div>
+            <div>
+                <label>Font-Color Username</label>
+                <input type="text" id="fontcolor_alert_username" placeholder="#FFFFFF"value="#212529" />
+                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
+            </div>
+            <div>
+                <label>Font-Color message</label>
+                <input type="text" id="fontcolor_alert_msg" placeholder="#FFFFFF"value="#212529" />
+                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
+            </div>
+            <button type="button" id="settings_save_alert_button" class="btn btn-success">Save</button>
+            <button type="button" id="settings_restore_alert_button" class="btn btn-danger">Restore</button>
+        </div>
+        <h5 id="pub_sub_event_title">Pub-Sub Events</h5>
+        <div id ="pub_sub_events_container" class="col-md-12">
+            <ul id ="pub_sub_event_list"></ul>
+        </div>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+// GLOBAL VARIABLES
+
+var pub_sub_queue = [];
+
+// DOCUMENT READY
+
+// We check the localstorage if settings are saved from earlier
+$(document).ready(function() {
+    restoreAlertSettings()
+});
+
+// INTERVALS
+
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
+window.setInterval(function(){
+    checkForPubSubEvents()
+}, 10000);
+
+// We check if events are in the queue. If yes, [0] will be played and removed
+window.setInterval(function(){
+    if(pub_sub_queue.length > 0) pubSubAlert()
+}, 5000);
+
+// JQuery functions so the sliders and all work
+$(document).ready(function() {
+  const $font_size_title_label = $('.font_size_title_label');
+  const $value = $('#slider_font_size_title');
+
+  $font_size_title_label.html($value.val());
+  $value.on('input change', () => {
+    $font_size_title_label.html($value.val());
+  });
+});
+
+$(document).ready(function() {
+  const $font_size_msg_label = $('.font_size_msg_label');
+  const $value = $('#slider_font_size_msg');
+
+  $font_size_msg_label.html($value.val());
+  $value.on('input change', () => {
+    $font_size_msg_label.html($value.val());
+  });
+});
+
+$(document).ready(function() {
+  const $font_size_costs_label = $('.font_size_costs_label');
+  const $value = $('#slider_font_size_costs');
+
+  $font_size_costs_label.html($value.val());
+  $value.on('input change', () => {
+    $font_size_costs_label.html($value.val());
+  });
+});
+
+$(document).ready(function() {
+  const $font_size_username_label = $('.font_size_username_label');
+  const $value = $('#slider_font_size_username');
+
+  $font_size_username_label.html($value.val());
+  $value.on('input change', () => {
+    $font_size_username_label.html($value.val());
+  });
+});
+
+$(document).ready(function() {
+  const $sound_volume_label = $('.sound_volume_label');
+  const $value = $('#slider_sound_volume');
+
+  $sound_volume_label.html($value.val());
+  $value.on('input change', () => {
+    $sound_volume_label.html($value.val());
+  });
+});
+
+$(document).ready(function() {
+  const $durationLabel = $('.durationLabel');
+  const $value = $('#slider_alert_duration');
+
+  $durationLabel.html($value.val());
+  $value.on('input change', () => {
+    $durationLabel.html($value.val());
+  });
+});
+
+
+// EVENTLISTENERS
+
+// Listener for button to play the currently selected sound
+document.getElementById("sound_selection_button").addEventListener("click", function(){
+    var volume = document.getElementById("slider_sound_volume").value / 100
+    var selection = document.getElementById("sound_alert_selection").value
+    var audio;
+
+    switch(parseInt(selection)){
+        case 1:
+            audio = new Audio("resources\\sounds\\1.wav")
+            break;
+        case 2:
+            audio = new Audio("resources\\sounds\\2.wav")
+            break;
+    }
+    audio.volume = volume
+    audio.play()
+},false)
+
+// Listener for button to save all settings for the alert in the localstorage
+document.getElementById("settings_save_alert_button").addEventListener("click", function(){
+    saveAlertSettings();
+}, false)
+
+// Listener for button to restore all settings back to the saved ones in the localstorage
+document.getElementById("settings_restore_alert_button").addEventListener("click", function(){
+    restoreAlertSettings()
+}, false)
+
+document.getElementById('openAlertWindow').addEventListener("click", function() {
+    openAlertWindow();
+}, false);
+
+
+// FUNCTIONS
+
+function saveAlertSettings(){
+    localStorage.setItem('settings_alert_duration', document.getElementById("slider_alert_duration").value)
+    localStorage.setItem('settings_alert_img', document.getElementById("image_alert_url").value)
+    localStorage.setItem('settings_alert_sound', document.getElementById("sound_alert_selection").value)
+    localStorage.setItem('settings_alert_volume', document.getElementById("slider_sound_volume").value)
+    localStorage.setItem('settings_alert_fontfamily', document.getElementById("fontfamily_alert_selection").value)
+    localStorage.setItem('settings_alert_fontsize_title', document.getElementById("slider_font_size_title").value)
+    localStorage.setItem('settings_alert_fontsize_costs', document.getElementById("slider_font_size_costs").value)
+    localStorage.setItem('settings_alert_fontsize_username', document.getElementById("slider_font_size_username").value)
+    localStorage.setItem('settings_alert_fontsize_msg', document.getElementById("slider_font_size_msg").value)
+    localStorage.setItem('settings_alert_fontcolor_title', document.getElementById("fontcolor_alert_title").value)
+    localStorage.setItem('settings_alert_fontcolor_costs', document.getElementById("fontcolor_alert_costs").value)
+    localStorage.setItem('settings_alert_fontcolor_username', document.getElementById("fontcolor_alert_username").value)
+    localStorage.setItem('settings_alert_fontcolor_msg', document.getElementById("fontcolor_alert_msg").value)
+}
+
+// Restore all values in settings if they are saved in localstorage
+function restoreAlertSettings(){
+    if(localStorage.getItem('settings_alert_duration') != null){
+        document.getElementById("slider_alert_duration").value = localStorage.getItem('settings_alert_duration')
+    }
+    if(localStorage.getItem('settings_alert_img') != null){
+        document.getElementById("image_alert_url").value = localStorage.getItem('settings_alert_img')
+    }
+    if(localStorage.getItem('settings_alert_sound') != null){
+        document.getElementById("sound_alert_selection").value = localStorage.getItem('settings_alert_sound')
+    }
+    if(localStorage.getItem('settings_alert_volume') != null){
+        document.getElementById("slider_sound_volume").value = localStorage.getItem('settings_alert_volume')
+    }
+    if(localStorage.getItem('settings_alert_fontfamily') != null){
+        document.getElementById("fontfamily_alert_selection").value = localStorage.getItem('settings_alert_fontfamily')
+    }
+    if(localStorage.getItem('settings_alert_fontsize_title') != null){
+        document.getElementById("slider_font_size_title").value = localStorage.getItem('settings_alert_fontsize_title')
+    }
+    if(localStorage.getItem('settings_alert_fontsize_costs') != null){
+        document.getElementById("slider_font_size_costs").value = localStorage.getItem('settings_alert_fontsize_costs')
+    }
+    if(localStorage.getItem('settings_alert_fontsize_username') != null){
+        document.getElementById("slider_font_size_username").value = localStorage.getItem('settings_alert_fontsize_username')
+    }
+    if(localStorage.getItem('settings_alert_fontsize_msg') != null){
+        document.getElementById("slider_font_size_msg").value = localStorage.getItem('settings_alert_fontsize_msg')
+    }
+    if(localStorage.getItem('settings_alert_fontcolor_title') != null){
+        document.getElementById("fontcolor_alert_title").value = localStorage.getItem('settings_alert_fontcolor_title')
+    }
+    if(localStorage.getItem('settings_alert_fontcolor_costs') != null){
+        document.getElementById("fontcolor_alert_costs").value = localStorage.getItem('settings_alert_fontcolor_costs')
+    }
+    if(localStorage.getItem('settings_alert_fontcolor_username') != null){
+        document.getElementById("fontcolor_alert_username").value = localStorage.getItem('settings_alert_fontcolor_username')
+    }
+    if(localStorage.getItem('settings_alert_fontcolor_msg') != null){
+        document.getElementById("fontcolor_alert_msg").value = localStorage.getItem('settings_alert_fontcolor_msg')
+    }
+}
+
+// Opens a new window to display incoming alerts
+function openAlertWindow(){
+    // Get values from document
+    var alert_duration_val = document.getElementById("slider_alert_duration").value;
+    var alert_image_val = document.getElementById("image_alert_url").value;
+    var alert_fontfamily_val = document.getElementById("fontfamily_alert_selection").value;
+    var alert_sliderfontsize_title_val = document.getElementById("slider_font_size_title").value;
+    var alert_sliderfontsize_costs_val = document.getElementById("slider_font_size_costs").value;
+    var alert_sliderfontsize_username_val = document.getElementById("slider_font_size_username").value;
+    var alert_sliderfontsize_msg_val = document.getElementById("slider_font_size_msg").value;
+    var alert_fontcolor_title_val = document.getElementById("fontcolor_alert_title").value;
+    var alert_fontcolor_costs_val = document.getElementById("fontcolor_alert_costs").value;
+    var alert_fontcolor_username_val = document.getElementById("fontcolor_alert_username").value;
+    var alert_fontcolor_msg_val = document.getElementById("fontcolor_alert_msg").value;
+    // We divide the value for volume by 100 because javascript only allows 0.0 - 1.0
+    var alert_sound_volume_val = document.getElementById("slider_sound_volume").value / 100
+    // We substract by 1 so we can use it as an index
+    var alert_sound_selection_val = document.getElementById("sound_alert_selection").value
+
+    // We can't send get-parameters with a '#' in it. So we remove it
+    if(alert_fontcolor_title_val.includes('#')){
+        alert_fontcolor_title_val = alert_fontcolor_title_val.split('#').join('')
+    }
+    if(alert_fontcolor_costs_val.includes('#')){
+        alert_fontcolor_costs_val = alert_fontcolor_costs_val.split('#').join('')
+    }
+    if(alert_fontcolor_username_val.includes('#')){
+        alert_fontcolor_username_val = alert_fontcolor_username_val.split('#').join('')
+    }
+    if(alert_fontcolor_msg_val.includes('#')){
+        alert_fontcolor_msg_val = alert_fontcolor_msg_val.split('#').join('')
+    }
+
+    //todo: remove spaces in input
+    // Creating the url with get parameters (With an id because the alertwindow doesn't have cookies in obs)
+    var urlString = "alertwindow?" + 
+    "duration=" + alert_duration_val +
+    "&image=" + alert_image_val +
+    "&fontfamily=" + alert_fontfamily_val +
+    "&fontsizetitle=" + alert_sliderfontsize_title_val + 
+    "&fontsizecosts=" + alert_sliderfontsize_costs_val + 
+    "&fontsizeusername=" + alert_sliderfontsize_username_val + 
+    "&fontsizemsg=" + alert_sliderfontsize_msg_val + 
+    "&fontcolortitle=" + alert_fontcolor_title_val +
+    "&fontcolorcosts=" + alert_fontcolor_costs_val +
+    "&fontcolorusername=" + alert_fontcolor_username_val +
+    "&fontcolormsg=" + alert_fontcolor_msg_val +
+    "&sound=" + alert_sound_selection_val +
+    "&volume=" + alert_sound_volume_val +
+    "&id=" + @Model.user.information.id
+
+    window.open(urlString, "targetWindow", 'toolbar=no, status=no, menubar=no, scrollbars=no, resizable=yes, width=800, height=600');
+}
+
+
+function pubSubAlert(){
+    // We create the dom-list-element to display on the document
+    var ulist = document.getElementById('pub_sub_event_list');
+        var listElement = document.createElement("li");
+        listElement.className = "pub_sub_event_list_item";
+            var header = document.createElement("div");
+            header.className = "pub_sub_event_list_item_header_container";
+                var header_img = document.createElement("img");
+                header_img.setAttribute("src", "https://pbs.twimg.com/profile_images/1112940868548190208/qhYRpmrA_400x400.jpg")
+                header_img.className = "pub_sub_event_list_item_header_img"
+                header.appendChild(header_img);
+
+                var title = document.createElement("div");
+                title.className = "pub_sub_event_list_item_header_title";
+                title.appendChild(document.createTextNode(pub_sub_queue[0].title))
+                header.appendChild(title)
+
+                var cost = document.createElement("div");
+                cost.className = "pub_sub_event_list_item_header_cost";
+                cost.appendChild(document.createTextNode(pub_sub_queue[0].cost))
+                header.appendChild(cost);
+
+            var username = document.createElement("div");
+            username.className = "pub_sub_event_list_item_username";
+            username.appendChild(document.createTextNode(pub_sub_queue[0].display_name))
+            var msg = document.createElement("div");
+            msg.className = "pub_sub_event_list_item_msg";
+            // user_input can be empty so we check
+            if(pub_sub_queue[0].user_input != null){
+                msg.appendChild(document.createTextNode('"' + pub_sub_queue[0].user_input + '"'))
+            }
+            var timestamp = document.createElement("div");
+            timestamp.className = "pub_sub_event_list_item_timestamp";
+            timestamp.appendChild(document.createTextNode(pub_sub_queue[0].redeemed_at))
+
+        listElement.appendChild(header);
+        listElement.appendChild(username);
+        listElement.appendChild(msg);
+        listElement.appendChild(timestamp);
+    // Push the element to the beginning if list is not empty
+    if(ulist.childElementCount > 0){
+        ulist.insertBefore(listElement, ulist.firstChild);
+        pub_sub_queue.shift();
+    }
+    else ulist.appendChild(listElement)
+
+    // Remove first alert from the queue because be displayed it now
+    pub_sub_queue.shift();
+}
+
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
+function checkForPubSubEvents() {
+   $.ajax({
+        type: "POST",
+        url: '/dashboard?handler=GetNewPubSubs', 
+        contentType: "application/x-www-form-urlencoded",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        success: function(data){
+            var json = []
+            if(data == "Error") {
+                return;
+            }
+            json = JSON.parse(data)
+            
+            for(var i = 0; i < json.length; i++){
+                pub_sub_queue.push(json[i]);
+            }
+        }
+   })
+ }
+</script>
+
+
+
+

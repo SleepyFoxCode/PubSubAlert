@@ -1,0 +1,21 @@
+#main_container_introduction{
+    text-align: center;
+}
+
+#presentation_img{
+    max-width: 40em;
+    border-radius: 1em;
+}
+
+.social_logo{
+    max-width: 6em;
+}
+
+#main_container_social{
+    margin-top: 3em;
+}
+
+#start_now_btn{
+    margin-top: 1em;
+    width: 10em;
+}
