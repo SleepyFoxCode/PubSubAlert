@@ -18,7 +18,7 @@ namespace RazorPagesTwitchPubSub{
 
         public static FileStream fs;
 
-        static string websocketDataPath = "~/PubSubWebsocket/data/";
+        static string websocketDataPath = "/PubSubWebsocket/data/";
         static string userFileName = "users.json";
         public static void UpdateUser(String id, String name, String access_token){
 
