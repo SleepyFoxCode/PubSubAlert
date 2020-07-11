@@ -363,7 +363,12 @@ function pubSubAlert(){
             var header = document.createElement("div");
             header.className = "pub_sub_event_list_item_header_container";
                 var header_img = document.createElement("img");
-                header_img.setAttribute("src", "https://pbs.twimg.com/profile_images/1112940868548190208/qhYRpmrA_400x400.jpg")
+                if(pub_sub_queue[0].image != null){
+                    header_img.setAttribute("src", pub_sub_queue[0].image)
+                }
+                else{
+                    header_img.setAttribute("src", pub_sub_queue[0].default_image)
+                }
                 header_img.className = "pub_sub_event_list_item_header_img"
                 header.appendChild(header_img);
 
