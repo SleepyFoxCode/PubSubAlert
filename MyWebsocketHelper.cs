@@ -53,6 +53,7 @@ namespace RazorPagesTwitchPubSub{
             }
             catch(Exception e){
                 System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
                 if(fs == null){
                     return;
                 }
@@ -71,6 +72,7 @@ namespace RazorPagesTwitchPubSub{
             }
             catch(Exception e){
                 System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
                 if(fs == null){
                     return;
                 }
