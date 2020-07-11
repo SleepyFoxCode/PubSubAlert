@@ -110,6 +110,33 @@ namespace RazorPagesTwitchPubSub{
             }
         }
 
+        public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEventsTest(){
+            List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
+            try{    
+                fs = new FileStream(websocketDataPath + "testing/" + "test.json", FileMode.Open);
+                using (StreamReader reader = new StreamReader(fs)){
+                    string str = reader.ReadToEnd();
+                    fs.Close();
+                    if(str == String.Empty) return null;
+                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+                }
+            }
+            catch(System.IO.FileNotFoundException e){
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
+                return null;
+            }
+            catch(Exception e){
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
+                if(fs == null){
+                    return null;
+                }
+                fs.Close();
+                return null;
+            }
+        }
+
 
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubAlerts(string id){
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
@@ -136,6 +163,42 @@ namespace RazorPagesTwitchPubSub{
                 }
                 fs.Close();
                 return null;
+            }
+        }
+
+        public static void GetPubSubAlertsTest(string id){
+            string testStr = null;
+
+
+            try{    
+                fs = new FileStream(websocketDataPath + "testing/" + "alert/" + "test.json", FileMode.Open);
+                using (StreamReader reader = new StreamReader(fs)){
+                    
+                    testStr = reader.ReadToEnd();
+                    fs.Close();
+                    if(testStr == String.Empty) return;
+                    //return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+                }
+                fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open);
+                using(StreamWriter writer = new StreamWriter(fs)){
+                    writer.Write(testStr);
+                    writer.Flush();
+                    fs.Close();
+                }
+            }
+            catch(System.IO.FileNotFoundException e){
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
+                return;
+            }
+            catch(Exception e){
+                System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
+                if(fs == null){ 
+                    return;
+                }
+                fs.Close();
+                return;
             }
         }
     

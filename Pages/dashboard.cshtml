@@ -24,6 +24,7 @@
     <hr/>
     <div id="pub_sub_container" class="col-md-12">
         <button type="button" class="btn btn-primary" id="openAlertWindow">Open Alert Window</button>
+        <button type="button" class="btn btn-info" id="testAlert">Test Alert</button>
         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#pub_sub_alert_setting_container" aria-expanded="false" aria-controls="pub_sub_alert_setting_container">Settings</button>
         <div id="pub_sub_alert_setting_container" class="collapse">
             <div class="" style="display: flex;">
@@ -238,6 +239,28 @@ document.getElementById('openAlertWindow').addEventListener("click", function() 
     openAlertWindow();
 }, false);
 
+document.getElementById('testAlert').addEventListener("click", function(){
+   $.ajax({
+        type: "POST",
+        url: 'dashboard?handler=GetNewPubSubsTest', 
+        contentType: "application/x-www-form-urlencoded",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("XSRF-TOKEN",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        success: function(data){
+            var json = []
+            if(data == "Error") {
+                return;
+            }
+            json = JSON.parse(data)
+            
+            for(var i = 0; i < json.length; i++){
+                pub_sub_queue.push(json[i]);
+            }
+        }
+   })
+})
 
 // FUNCTIONS
 

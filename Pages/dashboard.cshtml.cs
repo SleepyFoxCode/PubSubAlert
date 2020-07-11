@@ -114,6 +114,38 @@ namespace RazorPagesTwitchPubSub.Pages
             MyWebsocketHelper.ClearPubSubEventFile(user.information.id);
             return new JsonResult(JsonSerializer.Serialize(events));
         }
+        public IActionResult OnPostGetNewPubSubsTest(){
+
+            user = new CurrentUser(this.HttpContext, _configuration);
+            if(user.information == null) return new JsonResult("Error");
+
+            // This adds a testing alert to the official alert file for alert window
+            MyWebsocketHelper.GetPubSubAlertsTest(user.information.id);
+
+            // This creates a test event for the dashboard from a testfile
+            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubEventsTest();
+            if(pubSubList == null) return new JsonResult("Error");
+            if(pubSubList.Count < 1) return new JsonResult("Error");
+
+            List<TwitchJsonHelper.JsonMyPubSub> events = new List<TwitchJsonHelper.JsonMyPubSub>();
+            foreach(TwitchJsonHelper.JsonPubSubRoot item in pubSubList){
+                TwitchJsonHelper.JsonMyPubSub pubSubObj  = new TwitchJsonHelper.JsonMyPubSub();
+                pubSubObj.title = item.data.redemption.reward.title;
+                pubSubObj.pubSub_id = item.data.redemption.id;
+                pubSubObj.display_name = item.data.redemption.user.display_name;
+                // Time parsing to read it better
+                string date = item.data.timestamp.Substring(0,item.data.timestamp.IndexOf('T'));
+                string time = item.data.timestamp.Substring(item.data.timestamp.IndexOf('T') + 1, 8);
+                pubSubObj.redeemed_at = date + " " + time;
+                pubSubObj.cost = item.data.redemption.reward.cost;
+                if(item.data.redemption.reward.image != null) pubSubObj.image = item.data.redemption.reward.image.url_1x;
+                if(item.data.redemption.reward.default_image != null) pubSubObj.default_image = item.data.redemption.reward.default_image.url_1x;
+                pubSubObj.user_input = item.data.redemption.user_input;
+                events.Add(pubSubObj);
+            }
+            // Return to ajax request
+            return new JsonResult(JsonSerializer.Serialize(events));
+        }
     }
        
 }
