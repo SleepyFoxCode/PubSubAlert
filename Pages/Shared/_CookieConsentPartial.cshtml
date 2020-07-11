@@ -1,0 +1,25 @@
+@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var showBanner = !consentFeature?.CanTrack ?? false;
+    var cookieString = consentFeature?.CreateConsentCookie();
+}
+
+@if (showBanner)
+{
+    <div style="color:white; max-width:90%;border-radius:1em;margin-left:auto;margin-right:auto; text-align:center;background-color:#5ad08c;border-color:#5ad08c" id="cookieConsent" class="alert alert-info alert-dismissible fade show" role="alert">
+        I'm obligated by law <b>(General Data Protection Regulation)</b> to inform you that this site stores cookies on your webbrowser. Those cookies are necessary. By using this site you allow to storage necessary cookies on your webbrowser.
+        <button style="color:white; padding:unset; float:none; position:unset; opacity:1.0;right:unset;" type="button" class="accept-policy close" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+            <span aria-hidden="true">Accept</span>
+        </button>
+    </div>
+    <script>
+        (function () {
+            var button = document.querySelector("#cookieConsent button[data-cookie-string]");
+            button.addEventListener("click", function (event) {
+                document.cookie = button.dataset.cookieString;
+            }, false);
+        })();
+    </script>
+}

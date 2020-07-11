@@ -62,6 +62,7 @@ namespace RazorPagesTwitchPubSub
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
