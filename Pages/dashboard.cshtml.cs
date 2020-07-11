@@ -65,14 +65,20 @@ namespace RazorPagesTwitchPubSub.Pages
                     throw new Exception("User.information was null in OnGetRedirect in Authentication");
                 }
 
+                var options = new CookieOptions
+                {
+                    IsEssential = true
+                };
+
                 Response.Cookies.Delete("access_token");
                 Response.Cookies.Delete("refresh_token");
-                Response.Cookies.Append("access_token", jsonUserAuth.access_token);
-                Response.Cookies.Append("refresh_token", jsonUserAuth.refresh_token);
+                Response.Cookies.Append("access_token", jsonUserAuth.access_token, options);
+                Response.Cookies.Append("refresh_token", jsonUserAuth.refresh_token, options);
                 MyWebsocketHelper.UpdateUser(user.information.id, user.information.login, jsonUserAuth.access_token);
             }
             catch(Exception e){
                 System.Diagnostics.Debug.WriteLine(e.ToString());
+                Log.WriteToLog(e.ToString());
                 return Redirect("https://" + _configuration["Host"]);
             }
 

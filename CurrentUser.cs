@@ -27,8 +27,14 @@ namespace RazorPagesTwitchPubSub{
                 else {
                     ctx.Response.Cookies.Delete("access_token");
                     ctx.Response.Cookies.Delete("refresh_token");
-                    ctx.Response.Cookies.Append("access_token", refreshObj.access_token);
-                    ctx.Response.Cookies.Append("refresh_token", refreshObj.refresh_token);
+
+                    var options = new CookieOptions
+                    {
+                        IsEssential = true
+                    };
+                    
+                    ctx.Response.Cookies.Append("access_token", refreshObj.access_token, options);
+                    ctx.Response.Cookies.Append("refresh_token", refreshObj.refresh_token, options);
                     information = TwitchHelper.LoadUserInformation(refreshObj.access_token, _configuration);
                     // We refresh the acces token on our websocket server
                     MyWebsocketHelper.UpdateUser(information.id, information.login, refreshObj.access_token);
