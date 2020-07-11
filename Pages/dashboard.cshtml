@@ -409,7 +409,7 @@ function pubSubAlert(){
 function checkForPubSubEvents() {
    $.ajax({
         type: "POST",
-        url: '/dashboard?handler=GetNewPubSubs', 
+        url: '~/dashboard?handler=GetNewPubSubs', 
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
