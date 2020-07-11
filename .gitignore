@@ -35,7 +35,7 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Ll]og/
+#[Ll]og/ We use our own log
 [Ll]ogs/
 
 # Visual Studio 2015/2017 cache/options directory
