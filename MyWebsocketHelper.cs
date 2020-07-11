@@ -18,7 +18,7 @@ namespace RazorPagesTwitchPubSub{
 
         public static FileStream fs;
 
-        static string websocketDataPath = "PubSubWebsocket\\data\\";
+        static string websocketDataPath = "~/PubSubWebsocket/data/";
         static string userFileName = "users.json";
         public static void UpdateUser(String id, String name, String access_token){
 
@@ -112,7 +112,7 @@ namespace RazorPagesTwitchPubSub{
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubAlerts(string id){
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
             try{    
-                fs = new FileStream(websocketDataPath + "\\alert\\" + id + ".json", FileMode.Open);
+                fs = new FileStream(websocketDataPath + "/alert/" + id + ".json", FileMode.Open);
                 using (StreamReader reader = new StreamReader(fs)){
                     
                     string str = reader.ReadToEnd();
@@ -153,7 +153,7 @@ namespace RazorPagesTwitchPubSub{
         }
         public static void ClearPubSubAlertFile(string id){
             try{
-                fs = new FileStream(websocketDataPath + "\\alert\\" + id + ".json", FileMode.Truncate);
+                fs = new FileStream(websocketDataPath + "/alert/" + id + ".json", FileMode.Truncate);
                 fs.Close();
             }
             catch(System.IO.FileNotFoundException e){

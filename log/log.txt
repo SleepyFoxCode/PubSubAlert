@@ -1,1 +1,25 @@
-Logfile code.sleepyfox.net/pubsubalert
+Logfile code.sleepyfox.net/pubsubalertSystem.Net.WebException: The remote server returned an error: (401) Unauthorized.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.AccessTokenIsValid(String access_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 39System.Net.WebException: The remote server returned an error: (400) Bad Request.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.RefreshTokens(String refresh_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 69System.Net.WebException: The remote server returned an error: (401) Unauthorized.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.AccessTokenIsValid(String access_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 39System.Net.WebException: The remote server returned an error: (400) Bad Request.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.RefreshTokens(String refresh_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 69System.Net.WebException: The remote server returned an error: (401) Unauthorized.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.AccessTokenIsValid(String access_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 39System.Net.WebException: The remote server returned an error: (400) Bad Request.
+   at System.Net.HttpWebRequest.GetResponse()
+   at RazorPagesTwitchPubSub.TwitchHelper.RefreshTokens(String refresh_token, IConfiguration _configuration) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\TwitchHelper.cs:line 69System.ObjectDisposedException: Cannot access a closed file.
+   at System.IO.FileStream.Flush(Boolean flushToDisk)
+   at System.IO.FileStream.Flush()
+   at System.IO.StreamWriter.Flush(Boolean flushStream, Boolean flushEncoder)
+   at System.IO.StreamWriter.Dispose(Boolean disposing)
+   at System.IO.TextWriter.Dispose()
+   at RazorPagesTwitchPubSub.MyWebsocketHelper.UpdateUser(String id, String name, String access_token) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\MyWebsocketHelper.cs:line 71System.ObjectDisposedException: Cannot access a closed file.
+   at System.IO.FileStream.Flush(Boolean flushToDisk)
+   at System.IO.FileStream.Flush()
+   at System.IO.StreamWriter.Flush(Boolean flushStream, Boolean flushEncoder)
+   at System.IO.StreamWriter.Dispose(Boolean disposing)
+   at System.IO.TextWriter.Dispose()
+   at RazorPagesTwitchPubSub.MyWebsocketHelper.UpdateUser(String id, String name, String access_token) in C:\Users\Evoli\Documents\Programming\csharp\aspnet\RazorPagesTwitchPubSub\MyWebsocketHelper.cs:line 71

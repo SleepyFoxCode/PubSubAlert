@@ -114,7 +114,7 @@ function showAlert(){
     document.getElementById("alert_username").innerHTML = "<b>" + alert_obj.user + " has spent " + "</b>"
 
     // Alert Audio to play. Currently doesn't work in OBS (Chromium)
-    var audio = new Audio("resources\\sounds\\" + "@Model.alertSettings.sound" + ".wav")
+    var audio = new Audio("~/resources/sounds/" + "@Model.alertSettings.sound" + ".wav")
     audio.volume = @Model.alertSettings.volume
     audio.play()
 
@@ -141,7 +141,7 @@ function showAlert(){
 function checkForPubSubEvents() {
     $.ajax({
             type: "POST",
-            url: '/alertwindow?handler=GetNewPubSubs&id=@Model.id', 
+            url: '~/alertwindow?handler=GetNewPubSubs&id=@Model.id', 
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("XSRF-TOKEN",
