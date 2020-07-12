@@ -8,7 +8,6 @@ import os
 
 server = "wss://pubsub-edge.twitch.tv"
 
-#pub_sub_event_folder = "C:\\Users\\Evoli\\Documents\\Programming\\Python\\PubSubWebsocket\\data\\"
 pub_sub_event_folder = os.path.dirname(os.path.realpath(__file__)) + "\\data\\"
 pub_sub_alert_folder = os.path.dirname(os.path.realpath(__file__)) + "\\data\\alert\\"
 loop = asyncio.get_event_loop()
@@ -20,27 +19,18 @@ class User:
     access_token = ""
 
 class Connection:
-
-    
     channel_id = ""
     access_token = ""
-
-
-
 
     def __init__(self, channel_id, access_token):
         self.channel_id = channel_id
         self.access_token = access_token
 
-
-
     async def listen_to_server(self):
         try:
             async with websockets.connect(server) as websocket:
-
                 nonce = string.ascii_lowercase
                 ''.join(random.choice(nonce) for i in range(20))
-
                 message = "{"
                 message += "\"type\": \"LISTEN\","
                 message += "\"nonce\": \"" + nonce + "\","
@@ -73,11 +63,8 @@ class Connection:
                         message_data_obj.pop("type")
                         write_pubsub_file(message_data_obj, self.channel_id, pub_sub_event_folder)
                         write_pubsub_file(message_data_obj, self.channel_id, pub_sub_alert_folder)
-
-
                     elif "RECONNECT" in data["type"]:
                         raise Exception("Error: RECONNECT")
-
         except Exception as e:
             print(e)
             print("Reconnecting to server in 5 seconds")
@@ -86,7 +73,6 @@ class Connection:
 
 def write_pubsub_file(json_obj, channel_id, folder):
     newJsonObject = None
-
     if not os.path.exists(folder + channel_id + ".json"):
         tmp_file = open(folder + channel_id + ".json", "w")
         tmp_file.flush()
@@ -121,7 +107,6 @@ async def ping_to_server():
             else: 
                 print ("No PONG received")
         await asyncio.sleep(random.randint(200,250))
-
 
 def get_user_list():
     user_list = []
@@ -167,29 +152,20 @@ async def continuing_update_user_list():
                         print("Updated Access-Token for {}".format(conItem.channel_id))
                     adjusted_new_user_list.remove(item)
 
-        
         for item in adjusted_new_user_list:
             conn = Connection(item.channel_id, item.access_token)
             connected_user.append(conn)
             print("New connection with ID {}".format(item.channel_id))
             loop.create_task(conn.listen_to_server()) # Task for every User (Connection)
             
-                
         await asyncio.sleep(10)
 
 
 
-
-
 def main():
-
-
     loop.create_task(continuing_update_user_list())
     loop.create_task(ping_to_server())
     loop.run_forever()
-
-
-
 
 main()
 
