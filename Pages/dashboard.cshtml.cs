@@ -23,7 +23,7 @@ namespace RazorPagesTwitchPubSub.Pages
 
         
 
-        public async Task<IActionResult> OnGetAsync(){
+        public IActionResult OnGet(){
             user = new CurrentUser(this.HttpContext, _configuration);
             if(user.information == null) return Redirect("https://id.twitch.tv/oauth2/authorize?client_id=" + _configuration["ClientId"] + "&redirect_uri=https://" + _configuration["Host"] + "/dashboard?handler=redirect&response_type=code&scope=channel:read:redemptions+user:read:email");
             MyWebsocketHelper.ClearPubSubEventFile(user.information.id);

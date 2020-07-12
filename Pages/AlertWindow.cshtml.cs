@@ -20,7 +20,7 @@ namespace RazorPagesTwitchPubSub.Pages
         // Since we can't have cookies in obs we need to get the user_id from our dashboard
         public string id;      
 
-        public async Task<IActionResult> OnGetAsync(){
+        public IActionResult OnGet(){
             id = HttpContext.Request.Query["id"];
             // Clear the alert file from our websocket when we open the window (or refresh it)
             MyWebsocketHelper.ClearPubSubAlertFile(id);
