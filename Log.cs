@@ -7,24 +7,20 @@ namespace RazorPagesTwitchPubSub{
 
         static string diretory = "log\\";
         static string filename = "log.txt";
-        static FileStream fs = null;
+
 
         public static void WriteToLog(string str){
             try{
-                fs = new FileStream(diretory + filename, FileMode.Append);
-                using(StreamWriter writer = new StreamWriter(fs)){
-                    writer.Write(str);
-                    fs.Flush();
+                using(FileStream fs = new FileStream(diretory + filename, FileMode.Append)){
+                    using(StreamWriter writer = new StreamWriter(fs)){
+                        writer.Write(str);
+                        fs.Flush();
+                    }
                 }
-                fs.Close();
             }
             catch(Exception e){
-                if(fs != null){
-                    fs.Close();
-                }
-                return;
+                System.Console.Write(e.ToString());
             }
         }
-
     }
 }
