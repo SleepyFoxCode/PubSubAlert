@@ -143,8 +143,8 @@ def get_user_list():
             user_obj.channel_id = user["channel_id"]
             user_obj.access_token = user["access_token"]
             user_list.append(user_obj)
-            return user_list
         json_file.close()
+        return user_list
 
 def update_new_tokens():
     pass

@@ -28,12 +28,14 @@ namespace RazorPagesTwitchPubSub{
             public String token_type { get; set; }
         }
 
+        // Json format to update the websocket user file
         public class JsonUpdateWS {
             public String channel_id {get;set;}
             public String login {get;set;}
             public String access_token{get;set;}
         }
 
+        // Json format to update the websocket user file but the list of it (This will be dumped into user.json)
         public class JsonUpdateWSList {
             public List<JsonUpdateWS> users {get;set;}
             public bool UpdateIfAlreadyExists(JsonUpdateWS obj){

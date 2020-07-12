@@ -15,229 +15,164 @@ using System.Text.Json.Serialization;
 namespace RazorPagesTwitchPubSub{
 
     class MyWebsocketHelper{
-
-        public static FileStream fs;
-
+        
+        // Data of the websocket. Here we store alerts, events, users
         static string websocketDataPath = "PubSubWebsocket/data/";
+        static string websocketDataPathTesting = websocketDataPath + "testing/";
         static string userFileName = "users.json";
+        
+        // Updates the user.json file for this user. When we update the user, we take the content out of the file, append the new user, and put it back
+        // Gets called when token gets refreshed or when user signs up
         public static void UpdateUser(String id, String name, String access_token){
 
             TwitchJsonHelper.JsonUpdateWS jsonObj = new TwitchJsonHelper.JsonUpdateWS();
             jsonObj.channel_id = id;
             jsonObj.login = name;
             jsonObj.access_token = access_token;
-
             TwitchJsonHelper.JsonUpdateWSList jsonList = new TwitchJsonHelper.JsonUpdateWSList();
             
-            String jsonNewString;
-
             // Read the old json file
-            try{    
-                fs = new FileStream(websocketDataPath + userFileName, FileMode.Open);
-                using (StreamReader reader = new StreamReader(fs)){
-                    string text = reader.ReadToEnd();
-                    fs.Close();
-                    if(text != String.Empty){
-                        jsonList = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUpdateWSList>(text);
-                        if(!jsonList.UpdateIfAlreadyExists(jsonObj)) jsonList.users.Add(jsonObj);
-                        jsonNewString = JsonSerializer.Serialize<TwitchJsonHelper.JsonUpdateWSList>(jsonList);
-                    }
-                    else{
-                        //jsonList.users
-                        jsonList.users = new List<TwitchJsonHelper.JsonUpdateWS>();
-                        jsonList.users.Add(jsonObj);
-                        jsonNewString = JsonSerializer.Serialize<TwitchJsonHelper.JsonUpdateWSList>(jsonList);
-                    }
+            if(!File.Exists(websocketDataPath + userFileName)) CreateFile(websocketDataPath + userFileName);
+            using (FileStream fs = new FileStream(websocketDataPath + userFileName, FileMode.Open)){
+                try{
+                StreamReader reader = new StreamReader(fs);
+                string text = reader.ReadToEnd();
+                String jsonNewString;
+                // user.json is not empty so we need to check if the user already exists
+                if(text != String.Empty){
+                    jsonList = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUpdateWSList>(text);
+                    if(!jsonList.UpdateIfAlreadyExists(jsonObj)) jsonList.users.Add(jsonObj);
+                    jsonNewString = JsonSerializer.Serialize<TwitchJsonHelper.JsonUpdateWSList>(jsonList);
+                }
+                else{
+                    jsonList.users = new List<TwitchJsonHelper.JsonUpdateWS>();
+                    jsonList.users.Add(jsonObj);
+                    jsonNewString = JsonSerializer.Serialize<TwitchJsonHelper.JsonUpdateWSList>(jsonList);
+                }
 
+                StreamWriter writer = new StreamWriter(fs);
+                writer.Write(jsonNewString);
+                writer.Flush();
+                
                 }
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){
-                    return;
+                catch(Exception e){
+                    Log.WriteToLog(e.ToString());
                 }
-                fs.Close();
-                return;
-            }
-
-            // Write the new json file
-            try{
-                fs = new FileStream(websocketDataPath + userFileName, FileMode.Create);
-                using(StreamWriter writer = new StreamWriter(fs)){
-                    writer.Write(jsonNewString);
-                    writer.Flush();
-                    fs.Close();
-                }
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){
-                    return;
-                }
-                fs.Close();
-                return;
             }
         }
 
         
-
+        // This gets all events for the dashboard that were fetched from the websocket
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEvents(string id){
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            try{    
-                fs = new FileStream(websocketDataPath + id + ".json", FileMode.Open);
-                using (StreamReader reader = new StreamReader(fs)){
-                    string str = reader.ReadToEnd();
-                    fs.Close();
-                    if(str == String.Empty) return null;
-                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+            if(!File.Exists(websocketDataPath + id + ".json")) CreateFile(websocketDataPath + id + ".json");
+            using(FileStream fs = new FileStream(websocketDataPath + id + ".json", FileMode.Open)){
+                try{
+                    StreamReader reader = new StreamReader(fs);
+                    string text = reader.ReadToEnd();
+                    if(text == String.Empty) return null;
+                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(text);
                 }
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                return null;
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){
+                catch(Exception e){
+                    Log.WriteToLog(e.ToString());
                     return null;
                 }
-                fs.Close();
-                return null;
             }
         }
 
+        // Creates a test event on the dashboard
+        // We take the json from a test json file
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEventsTest(){
+            // We need to create a file if the websocket never fetched an alert before
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            try{    
-                fs = new FileStream(websocketDataPath + "testing/" + "test.json", FileMode.Open);
-                using (StreamReader reader = new StreamReader(fs)){
-                    string str = reader.ReadToEnd();
-                    fs.Close();
-                    if(str == String.Empty) return null;
-                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+            if(!File.Exists(websocketDataPathTesting + "test.json")) CreateFile(websocketDataPathTesting + "test.json");
+            using(FileStream fs = new FileStream(websocketDataPathTesting + "test.json", FileMode.Open)){
+                try{
+                    StreamReader reader = new StreamReader(fs);
+                    string text = reader.ReadToEnd();
+                    if(text == String.Empty) return null;
+                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(text);
                 }
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                return null;
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){
+                catch(Exception e){
+                    Log.WriteToLog(e.ToString());
                     return null;
                 }
-                fs.Close();
-                return null;
             }
         }
 
-
+        // This gets all alerts for the alertwindow that were fetched from the websocket
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubAlerts(string id){
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            try{    
-                fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open);
-                using (StreamReader reader = new StreamReader(fs)){
-                    
-                    string str = reader.ReadToEnd();
-                    fs.Close();
-                    if(str == String.Empty) return null;
-                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+            if(!File.Exists(websocketDataPath + "alert/" + id + ".json")) CreateFile(websocketDataPath + "alert/" + id + ".json");
+            using(FileStream fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open)){
+                try{
+                    StreamReader reader = new StreamReader(fs);
+                    string text = reader.ReadToEnd();
+                    if(text == String.Empty) return null;
+                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(text);
                 }
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                return null;
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){ 
+                catch(Exception e){
+                    Log.WriteToLog(e.ToString());
                     return null;
                 }
-                fs.Close();
-                return null;
             }
         }
 
+        // Creates a test alert in the alert window
+        // We use a test file stored in a test folder and paste its content into the official alert file
+        // We can't use the same approach as in the GetPubSubEventTest because we have no button on the window
         public static void GetPubSubAlertsTest(string id){
-            string testStr = null;
+            // We need to create a file if the websocket never fetched an alert before
+            if(!File.Exists(websocketDataPathTesting + "alert/" + "test.json")) CreateFile(websocketDataPathTesting + "alert/" + "test.json");
+            using(FileStream fs = new FileStream(websocketDataPathTesting + "alert/" + "test.json", FileMode.Open)){
+                try{
+                    StreamReader reader = new StreamReader(fs);
+                    string text = reader.ReadToEnd();
+                    if(text == String.Empty) throw new Exception("Testfile is empty"); 
 
-
-            try{    
-                fs = new FileStream(websocketDataPath + "testing/" + "alert/" + "test.json", FileMode.Open);
-                using (StreamReader reader = new StreamReader(fs)){
-                    
-                    testStr = reader.ReadToEnd();
-                    fs.Close();
-                    if(testStr == String.Empty) return;
-                    //return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(str);
+                    if(!File.Exists(websocketDataPath + "alert/" + id + ".json")) CreateFile(websocketDataPath + "alert/" + id + ".json");
+                    using(FileStream fs_second = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open)){
+                        try{
+                            StreamWriter writer = new StreamWriter(fs_second);
+                            writer.Write(text);
+                            writer.Flush();
+                        }
+                        catch(Exception e){
+                            Log.WriteToLog(e.ToString());
+                        }
+                    }
                 }
-                fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open);
-                using(StreamWriter writer = new StreamWriter(fs)){
-                    writer.Write(testStr);
-                    writer.Flush();
-                    fs.Close();
+                catch(Exception e){
+                    Log.WriteToLog(e.ToString());
                 }
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                return;
-            }
-            catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
-                if(fs == null){ 
-                    return;
-                }
-                fs.Close();
-                return;
             }
         }
     
+        public static void CreateFile(string path){
+            Log.WriteToLog("Creating file in: " + path);
+            using(FileStream fs = File.Create(path)){}
+        }
+
+        // Clears all fetched events for the dashboard from the websocket
         public static void ClearPubSubEventFile(string id){
             try{
-                fs = new FileStream(websocketDataPath + id + ".json", FileMode.Truncate);
-                fs.Close();
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
+                using(FileStream fs = new FileStream(websocketDataPath + id + ".json", FileMode.Truncate)){}
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Log.WriteToLog(e.ToString());
-                if(fs == null){
-                    return;
-                }
-                fs.Close();
             }
         }
+    
+
+        // Clears all fetched alerts for the dashboard from the websocket
         public static void ClearPubSubAlertFile(string id){
             try{
-                fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Truncate);
-                fs.Close();
-            }
-            catch(System.IO.FileNotFoundException e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
-                Log.WriteToLog(e.ToString());
+                using(FileStream fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Truncate)){}
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Log.WriteToLog(e.ToString());
-                if(fs == null){
-                    return;
-                }
-                fs.Close();
             }
         }
-    }
 
+    }
 }
