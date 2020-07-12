@@ -8,12 +8,11 @@ namespace RazorPagesTwitchPubSub{
         static string diretory = "log\\";
         static string filename = "log.txt";
 
-
-        public static void WriteToLog(string str){
+        public static void WriteToLog(string msg){
             try{
                 using(FileStream fs = new FileStream(diretory + filename, FileMode.Append)){
                     using(StreamWriter writer = new StreamWriter(fs)){
-                        writer.Write(str);
+                        writer.WriteLine(DateTime.Now.ToString("dd-MM-yyyy_hh:mm:ss.fff") + " " + msg);
                         fs.Flush();
                     }
                 }

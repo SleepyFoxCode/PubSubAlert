@@ -7,7 +7,7 @@
     left: 0;
 }
 
-.alert_image{
+.image{
     margin-left: auto;
     margin-right: auto;
     max-width: 400px;
@@ -24,20 +24,20 @@
     flex-direction: column;
 }
 
-#alert_title{
+#title{
     word-break: break-all;
 }
 
-#alert_msg{
+#msg{
     max-width: 400px;
     word-break: break-all;
     font-style: italic;
 }
 
-#alert_costs{
+#costs{
 
 }
 
-#alert_costs img{
+#costs img{
     
 }

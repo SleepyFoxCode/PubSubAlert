@@ -23,7 +23,7 @@ namespace RazorPagesTwitchPubSub.Pages
         public IActionResult OnGet(){
             id = HttpContext.Request.Query["id"];
             // Clear the alert file from our websocket when we open the window (or refresh it)
-            MyWebsocketHelper.ClearPubSubAlertFile(id);
+            MyWebsocketHelper.ClearPubSubFile(id, MyWebsocketHelper.websocketDataPathAlert);
             // Setting up an object for the settings the user set for the alert. We get them from url 
             alertSettings = new AlertSettings();
             alertSettings.duration = HttpContext.Request.Query["duration"];
@@ -42,9 +42,10 @@ namespace RazorPagesTwitchPubSub.Pages
             return null;
         }
 
+        // This gets called from the html file every x seconds   
         public IActionResult OnPostGetNewPubSubs(){
             // Get all alerts to play from our websocket file
-            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubAlerts(HttpContext.Request.Query["id"]);
+            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(HttpContext.Request.Query["id"], MyWebsocketHelper.websocketDataPathAlert);
             if(pubSubList == null) return new JsonResult("Error");
             if(pubSubList.Count < 1) return new JsonResult("Error");
 
@@ -65,7 +66,7 @@ namespace RazorPagesTwitchPubSub.Pages
                 events.Add(pubSubObj);
             }
             // After getting all alerts from our websocket file we clear it. Important: If an alert happens in this function the alert will be destroyed
-            MyWebsocketHelper.ClearPubSubAlertFile(HttpContext.Request.Query["id"]);
+            MyWebsocketHelper.ClearPubSubFile(HttpContext.Request.Query["id"], MyWebsocketHelper.websocketDataPathAlert);
             // We return the json file with all the alerts. It returns a json with a list
             return new JsonResult(JsonSerializer.Serialize(events));
         }

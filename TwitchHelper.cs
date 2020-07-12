@@ -17,9 +17,9 @@ namespace RazorPagesTwitchPubSub{
         static string twitchNewAPIUrl = "https://api.twitch.tv/helix/";
         static string oAuthTokenRefreshUrl = "https://id.twitch.tv/oauth2/token";
 
+        // We check if the current access token is valid by calling the twitch token validation url
         public static  Boolean AccessTokenIsValid(String access_token, IConfiguration _configuration){
             if(access_token == String.Empty){
-                System.Diagnostics.Debug.WriteLine("Empty access token");
                 return false;
             }
             try{
@@ -36,12 +36,13 @@ namespace RazorPagesTwitchPubSub{
                 }
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e);
                 Log.WriteToLog(e.ToString());
                 return false;
             }
             return true;
         }
+
+        // We refresh tokens when access token doesn't work anymore by using the refresh token
         public static TwitchJsonHelper.JsonRefresh RefreshTokens(String refresh_token, IConfiguration _configuration){
             if(refresh_token==String.Empty) return null;
             try{
@@ -71,15 +72,15 @@ namespace RazorPagesTwitchPubSub{
                 else return null;
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Log.WriteToLog(e.ToString());
                 return null;
             }
         }
-        public static UserInformation LoadUserInformation(String access_token, IConfiguration _configuration){
 
+        // Gets user information by calling the new twitch api
+        public static UserInformation LoadUserInformation(String access_token, IConfiguration _configuration){
             try{
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create( twitchNewAPIUrl + "users");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(twitchNewAPIUrl + "users");
                 request.Headers.Add("Authorization", "Bearer " + access_token);
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); // Todo: Outsource client id
 
@@ -95,12 +96,10 @@ namespace RazorPagesTwitchPubSub{
                 }
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Log.WriteToLog(e.ToString());
                 return null;
             }
         }
-
 
 
         public class UserInformation {
@@ -117,5 +116,3 @@ namespace RazorPagesTwitchPubSub{
         }
     }
 }
-
-

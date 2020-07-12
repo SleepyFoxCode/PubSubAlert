@@ -9,8 +9,9 @@ namespace RazorPagesTwitchPubSub{
     class MyWebsocketHelper{
         
         // Data of the websocket. Here we store alerts, events, users
-        static string websocketDataPath = "PubSubWebsocket/data/";
-        static string websocketDataPathTesting = websocketDataPath + "testing/";
+        public static string websocketDataPath = "PubSubWebsocket/data/";
+        public static string websocketDataPathAlert = websocketDataPath + "alert/";
+        public static string websocketDataPathTesting = websocketDataPath + "testing/";
         static string userFileName = "users.json";
         
         // Updates the user.json file for this user. When we update the user, we take the content out of the file, append the new user, and put it back
@@ -53,12 +54,14 @@ namespace RazorPagesTwitchPubSub{
             }
         }
 
-        
-        // This gets all events for the dashboard that were fetched from the websocket
-        public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEvents(string id){
+
+
+
+        // This gets all pubsubs that were fetched from the websocket (Path decides if alert or event)
+        public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubs(string id, string path){
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            if(!File.Exists(websocketDataPath + id + ".json")) CreateFile(websocketDataPath + id + ".json");
-            using(FileStream fs = new FileStream(websocketDataPath + id + ".json", FileMode.Open)){
+            if(!File.Exists(path + id + ".json")) CreateFile(path + id + ".json");
+            using(FileStream fs = new FileStream(path + id + ".json", FileMode.Open)){
                 try{
                     StreamReader reader = new StreamReader(fs);
                     string text = reader.ReadToEnd();
@@ -71,7 +74,6 @@ namespace RazorPagesTwitchPubSub{
                 }
             }
         }
-
         // Creates a test event on the dashboard
         // We take the json from a test json file
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEventsTest(){
@@ -91,25 +93,7 @@ namespace RazorPagesTwitchPubSub{
                 }
             }
         }
-
-        // This gets all alerts for the alertwindow that were fetched from the websocket
-        public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubAlerts(string id){
-            List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            if(!File.Exists(websocketDataPath + "alert/" + id + ".json")) CreateFile(websocketDataPath + "alert/" + id + ".json");
-            using(FileStream fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open)){
-                try{
-                    StreamReader reader = new StreamReader(fs);
-                    string text = reader.ReadToEnd();
-                    if(text == String.Empty) return null;
-                    return list = JsonSerializer.Deserialize<List<TwitchJsonHelper.JsonPubSubRoot>>(text);
-                }
-                catch(Exception e){
-                    Log.WriteToLog(e.ToString());
-                    return null;
-                }
-            }
-        }
-
+        
         // Creates a test alert in the alert window
         // We use a test file stored in a test folder and paste its content into the official alert file
         // We can't use the same approach as in the GetPubSubEventTest because we have no button on the window
@@ -145,21 +129,10 @@ namespace RazorPagesTwitchPubSub{
             using(FileStream fs = File.Create(path)){}
         }
 
-        // Clears all fetched events for the dashboard from the websocket
-        public static void ClearPubSubEventFile(string id){
+        // Clears all fetched pubsubs either alert or event (Depends on the path)
+        public static void ClearPubSubFile(string id, string path){
             try{
-                using(FileStream fs = new FileStream(websocketDataPath + id + ".json", FileMode.Truncate)){}
-            }
-            catch(Exception e){
-                Log.WriteToLog(e.ToString());
-            }
-        }
-    
-
-        // Clears all fetched alerts for the dashboard from the websocket
-        public static void ClearPubSubAlertFile(string id){
-            try{
-                using(FileStream fs = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Truncate)){}
+                using(FileStream fs = new FileStream(path + id + ".json", FileMode.Truncate)){}
             }
             catch(Exception e){
                 Log.WriteToLog(e.ToString());

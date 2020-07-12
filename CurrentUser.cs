@@ -25,21 +25,20 @@ namespace RazorPagesTwitchPubSub{
                     ctx.Response.Cookies.Append("access_token", refreshObj.access_token, options);
                     ctx.Response.Cookies.Append("refresh_token", refreshObj.refresh_token, options);
                     information = TwitchHelper.LoadUserInformation(refreshObj.access_token, _configuration);
-                    // We refresh the acces token on our websocket server
                     MyWebsocketHelper.UpdateUser(information.id, information.login, refreshObj.access_token);
                 }
             }
             else {
                 information = TwitchHelper.LoadUserInformation(ctx.Request.Cookies["access_token"], _configuration);
-                //MyWebsocketHelper.UpdateUserOnWS(information.id, information.login, ctx.Request.Cookies["access_token"]);
             }
         }
-        // Overload: CALL ONLY IF YOU ARE SURE ACCESS_TOKEN IS VALID
+        // Overload: CALL ONLY IF YOU ARE 100% SURE ACCESS_TOKEN IS VALID SINCE WE SKIP THE ACCESSTOKEN CHECK
+        // This overload exists so we can call it without having the cookie in saved. (It takes a while until they are saved)
         public CurrentUser(String access_token, IConfiguration _configuration){
                 information = TwitchHelper.LoadUserInformation(access_token, _configuration);
                 MyWebsocketHelper.UpdateUser(information.id, information.login, access_token);
         }
-        public TwitchHelper.UserInformation information;    // Can be null
+        public TwitchHelper.UserInformation information;    
 
     }
 }

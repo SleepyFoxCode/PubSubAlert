@@ -26,6 +26,7 @@
         <button type="button" class="btn btn-primary" id="openAlertWindow">Open Alert Window</button>
         <button type="button" class="btn btn-info" id="testAlert">Test Alert</button>
         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#pub_sub_alert_setting_container" aria-expanded="false" aria-controls="pub_sub_alert_setting_container">Settings</button>
+        <span>(By refreshing this site or the alert window you clear all old redeems.)</span>
         <div id="pub_sub_alert_setting_container" class="collapse">
             <div class="" style="display: flex;">
                 <label>Duration</label>
@@ -239,6 +240,7 @@ document.getElementById('openAlertWindow').addEventListener("click", function() 
     openAlertWindow();
 }, false);
 
+// puts test data into the websocket pubsub files to create a test alert/event
 document.getElementById('testAlert').addEventListener("click", function(){
    $.ajax({
         type: "POST",

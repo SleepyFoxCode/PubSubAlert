@@ -21,12 +21,11 @@ namespace RazorPagesTwitchPubSub.Pages
             _configuration = configuration;
         }
 
-        
-
         public IActionResult OnGet(){
             user = new CurrentUser(this.HttpContext, _configuration);
             if(user.information == null) return Redirect("https://id.twitch.tv/oauth2/authorize?client_id=" + _configuration["ClientId"] + "&redirect_uri=https://" + _configuration["Host"] + "/dashboard?handler=redirect&response_type=code&scope=channel:read:redemptions+user:read:email");
-            MyWebsocketHelper.ClearPubSubEventFile(user.information.id);
+            MyWebsocketHelper.ClearPubSubFile(user.information.id, MyWebsocketHelper.websocketDataPath);
+
             return null;
         }
         
@@ -54,12 +53,7 @@ namespace RazorPagesTwitchPubSub.Pages
                     jsonUserAuth = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUserAuth>(jsonString);
                 }
 
-                user = new CurrentUser(jsonUserAuth.access_token, _configuration);
-                if(user.information == null){
-                    Response.Cookies.Delete("access_token");
-                    Response.Cookies.Delete("refresh_token");
-                    throw new Exception("User.information was null in OnGetRedirect in Authentication");
-                }
+
 
                 var options = new CookieOptions
                 {
@@ -70,10 +64,16 @@ namespace RazorPagesTwitchPubSub.Pages
                 Response.Cookies.Delete("refresh_token");
                 Response.Cookies.Append("access_token", jsonUserAuth.access_token, options);
                 Response.Cookies.Append("refresh_token", jsonUserAuth.refresh_token, options);
+                
+                user = new CurrentUser(jsonUserAuth.access_token, _configuration);
+                if(user.information == null){
+                    Response.Cookies.Delete("access_token");
+                    Response.Cookies.Delete("refresh_token");
+                    throw new Exception("User.information was null in OnGetRedirect in Authentication");
+                }
                 MyWebsocketHelper.UpdateUser(user.information.id, user.information.login, jsonUserAuth.access_token);
             }
             catch(Exception e){
-                System.Diagnostics.Debug.WriteLine(e.ToString());
                 Log.WriteToLog(e.ToString());
                 return Redirect("https://" + _configuration["Host"]);
             }
@@ -81,12 +81,12 @@ namespace RazorPagesTwitchPubSub.Pages
             return Redirect("https://" + _configuration["Host"] + "/dashboard");
         }
 
+        // This gets called from the html file every x seconds
         public IActionResult OnPostGetNewPubSubs(){
-
             user = new CurrentUser(this.HttpContext, _configuration);
             if(user.information == null) return new JsonResult("Error");
 
-            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubEvents(user.information.id);
+            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(user.information.id, MyWebsocketHelper.websocketDataPath);
             if(pubSubList == null) return new JsonResult("Error");
             if(pubSubList.Count < 1) return new JsonResult("Error");
 
@@ -107,7 +107,7 @@ namespace RazorPagesTwitchPubSub.Pages
                 events.Add(pubSubObj);
             }
             // Return to ajax request
-            MyWebsocketHelper.ClearPubSubEventFile(user.information.id);
+            MyWebsocketHelper.ClearPubSubFile(user.information.id, MyWebsocketHelper.websocketDataPath);
             return new JsonResult(JsonSerializer.Serialize(events));
         }
         public IActionResult OnPostGetNewPubSubsTest(){
