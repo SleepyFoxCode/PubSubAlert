@@ -1,16 +1,7 @@
 using System;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Net;
 using System.IO;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 
 
@@ -37,10 +28,11 @@ namespace RazorPagesTwitchPubSub{
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); 
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                using(Stream stream = response.GetResponseStream())
-                using(StreamReader reader = new StreamReader(stream)){
-                    String jsonString = reader.ReadToEnd();
-                    stream.Close();
+                using(Stream stream = response.GetResponseStream()){
+                    using(StreamReader reader = new StreamReader(stream)){
+                        String jsonString = reader.ReadToEnd();
+                        stream.Close();
+                    }
                 }
             }
             catch(Exception e){
@@ -67,12 +59,14 @@ namespace RazorPagesTwitchPubSub{
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(complete_url);
                 request.Method = "POST";
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                using(Stream stream = response.GetResponseStream())
-                using(StreamReader reader = new StreamReader(stream)){
-                    String jsonString = reader.ReadToEnd();
-                    stream.Close();
-                    jsonObj = JsonSerializer.Deserialize<TwitchJsonHelper.JsonRefresh>(jsonString);
+                using(Stream stream = response.GetResponseStream()){
+                    using(StreamReader reader = new StreamReader(stream)){
+                        String jsonString = reader.ReadToEnd();
+                        stream.Close();
+                        jsonObj = JsonSerializer.Deserialize<TwitchJsonHelper.JsonRefresh>(jsonString);
+                    }
                 }
+
                 if(jsonObj != null) return jsonObj;
                 else return null;
             }
@@ -90,13 +84,14 @@ namespace RazorPagesTwitchPubSub{
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); // Todo: Outsource client id
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                using(Stream stream = response.GetResponseStream())
-                using(StreamReader reader = new StreamReader(stream)){
-                    String jsonString = reader.ReadToEnd();
-                    stream.Close();
-                    TwitchJsonHelper.JsonUserInformationList jsonU = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUserInformationList>(jsonString);
-                    // Since this api call returns a list of users, we return the closest one. Maybe there is a better api call
-                    return jsonU.data[0];
+                using(Stream stream = response.GetResponseStream()){
+                    using(StreamReader reader = new StreamReader(stream)){
+                        String jsonString = reader.ReadToEnd();
+                        stream.Close();
+                        TwitchJsonHelper.JsonUserInformationList jsonU = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUserInformationList>(jsonString);
+                        // Since this api call returns a list of users, we return the closest one. Maybe there is a better api call
+                        return jsonU.data[0];
+                    }
                 }
             }
             catch(Exception e){
