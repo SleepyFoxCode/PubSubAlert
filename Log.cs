@@ -10,6 +10,8 @@ namespace RazorPagesTwitchPubSub{
 
         public static void WriteToLog(string msg){
             try{
+                if(!Directory.Exists(diretory)) Directory.CreateDirectory(diretory);
+                if(!File.Exists(diretory + filename)) File.Create(diretory + filename).Close();
                 using(FileStream fs = new FileStream(diretory + filename, FileMode.Append)){
                     using(StreamWriter writer = new StreamWriter(fs)){
                         writer.WriteLine(DateTime.Now.ToString("dd-MM-yyyy_hh:mm:ss.fff") + " " + msg);
