@@ -48,4 +48,17 @@
 
 #pub_sub_alert_setting_container {
     margin-left: 4em;
+    margin-top:1em;
+}
+
+#msg_alert{
+    width: 30%;
+}
+
+#image_alert_url{
+    width: 50%;
+}
+
+#settings_buttons{
+    margin-top: 1em;
 }

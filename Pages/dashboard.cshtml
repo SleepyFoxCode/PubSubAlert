@@ -81,10 +81,12 @@
             <div class="" style="display:flex">
                 <label>Font-Color</label>
                 <input type="text" id="fontcolor_alert_msg" placeholder="#FFFFFF"value="#212529" />
-                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
+                <a href="https://htmlcolorcodes.com/" target="_blank" style="margin-left: 0.5em;">Choose a color</a>
             </div>
-            <button type="button" id="settings_save_alert_button" class="btn btn-success">Save</button>
-            <button type="button" id="settings_restore_alert_button" class="btn btn-danger">Restore</button>
+            <div id="settings_buttons">
+                <button type="button" id="settings_save_alert_button" class="btn btn-success">Save</button>
+                <button type="button" id="settings_restore_alert_button" class="btn btn-danger">Restore</button>
+            </div>
         </div>
         <h5 id="pub_sub_event_title">Redeem Notifications</h5>
         <div id ="pub_sub_events_container" class="col-md-12">
