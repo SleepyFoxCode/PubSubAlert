@@ -122,12 +122,15 @@ def get_user_list():
         json_file.close()
         return
     else:
-        data = json.load(json_file)
-        for user in data['users']:
-            user_obj = User()
-            user_obj.channel_id = user["channel_id"]
-            user_obj.access_token = user["access_token"]
-            user_list.append(user_obj)
+        try:
+            data = json.load(json_file)
+            for user in data['users']:
+                user_obj = User()
+                user_obj.channel_id = user["channel_id"]
+                user_obj.access_token = user["access_token"]
+                user_list.append(user_obj)
+        except Exception as e:
+            print(e)
         json_file.close()
         return user_list
 

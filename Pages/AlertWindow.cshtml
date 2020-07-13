@@ -22,10 +22,8 @@
     <div id="main">
         <div id="alert">
             <img class="image" src="@Model.alertSettings.url"/>
-            <label id="username" style="margin-top:1em;color:@Model.alertSettings.font_color_username; font-size:@Model.alertSettings.font_size_username; font-family:@Model.alertSettings.font_family;"></label>
-            <label id="costs" style="color:@Model.alertSettings.font_color_costs; font-size:@Model.alertSettings.font_size_costs; font-family:@Model.alertSettings.font_family;"></label>
-            <label id="title" style="font-weight:bold;font-size:@Model.alertSettings.font_size_title; color:@Model.alertSettings.font_color_title; font-family:@Model.alertSettings.font_family;"></label>
-            <label id="msg" style="color:@Model.alertSettings.font_color_msg; font-size:@Model.alertSettings.font_size_msg; font-family:@Model.alertSettings.font_family;"></label>            
+            <label id="msg" style="color:@Model.alertSettings.font_color_msg; font-weight:bold;word-break:break-word; margin-left:auto; margin-right: auto; font-size:@Model.alertSettings.font_size_msg; font-family:@Model.alertSettings.font_family;"></label>    
+            <label id="user_msg" style="color:@Model.alertSettings.font_color_msg; word-break:break-word; font-style:italic; margin-left:auto; margin-right: auto; font-size:1.7em; font-family:@Model.alertSettings.font_family;"></label>        
         </div>
     </div>
 </body>
@@ -37,7 +35,7 @@
 // Object that we use to store the current object to update the alert in the html documnent when an alert occurs
 var alert_obj = {
     title: null,
-    msg: null,
+    usermsg: null,
     cost: null,
     img: null,
     default_img: null,
@@ -69,50 +67,40 @@ function startPubSubAlert(){
             alert_obj.cost = null;
             alert_obj.img = null;
             alert_obj.default_img = null;
-            alert_obj.msg = null;
+            alert_obj.usermsg = null;
             alert_obj.user = null;
             //Setup object
             alert_obj.title = alert_queue[0].title;
             alert_obj.cost = alert_queue[0].cost;
             alert_obj.img = alert_queue[0].image;
             alert_obj.default_img = alert_queue[0].default_image;
-            alert_obj.msg = alert_queue[0].user_input;
+            alert_obj.usermsg = alert_queue[0].user_input;
             alert_obj.user = alert_queue[0].display_name;
 
-            showAlert();
+            setupAlert();
             // Remove alert from queue because it played
             alert_queue.shift();
 }
 
 // Function to show
-function showAlert(){
-    document.getElementById("title").innerHTML = "<b>" + alert_obj.title + "</b>"
+function setupAlert(){
 
-    // It's possible that message is empty so we check it
-    if(alert_obj.msg != null){
-        document.getElementById("msg").innerHTML = "<b>" + '"' + alert_obj.msg + '"' + "<b>"
-    }
-    else document.getElementById("msg").innerHTML = ""
-    
-    // Append because innerHTML would clear the img tag
-    document.getElementById("costs").innerHTML = "<b>" + alert_obj.cost + "</b>"
-
-    var img = document.createElement("img")
-    img.style.fontSize = "@Model.alertSettings.font_size_costs"
+    var raw_msg = "@Model.alertSettings.msg"
+    raw_msg = raw_msg.replace("{user}", alert_obj.user)
+    raw_msg = raw_msg.replace("{item}", alert_obj.title)
+    raw_msg = raw_msg.replace("{price}", alert_obj.cost)
 
     
-    // Image for that cost icon is either the default from Twitch or a custom from the channel
-    if(alert_obj.img == null){
-        img.setAttribute("src", alert_obj.default_img)
-    }
-    else {
-        img.setAttribute("src", alert_obj.img)
-    }
-    document.getElementById("costs").appendChild(img)
+    var msg_label = document.getElementById("msg");
+    msg_label.innerHTML = ""
+    msg_label.append(document.createTextNode(raw_msg));
 
-    document.getElementById("username").innerHTML = "<b>" + alert_obj.user + " has spent " + "</b>"
+    var usermsg_label = document.getElementById("user_msg")
+    usermsg_label.innerHTML = ""
+    if(alert_obj.usermsg != null){
+        usermsg_label.append(document.createTextNode('"' + alert_obj.usermsg + '"'))
+    }
 
-    // Alert Audio to play. Currently doesn't work in OBS (Chromium)
     var audio = new Audio("resources\\sounds\\" + "@Model.alertSettings.sound" + ".wav")
     audio.volume = @Model.alertSettings.volume
     audio.play()

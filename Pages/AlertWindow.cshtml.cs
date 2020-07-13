@@ -26,19 +26,15 @@ namespace RazorPagesTwitchPubSub.Pages
             MyWebsocketHelper.ClearPubSubFile(id, MyWebsocketHelper.websocketDataPathAlert);
             // Setting up an object for the settings the user set for the alert. We get them from url 
             alertSettings = new AlertSettings();
+            alertSettings.msg = HttpContext.Request.Query["msg"];
             alertSettings.duration = HttpContext.Request.Query["duration"];
             alertSettings.url = HttpContext.Request.Query["image"];
-            alertSettings.font_size_title = HttpContext.Request.Query["fontsizetitle"] + "em";
-            alertSettings.font_size_costs = HttpContext.Request.Query["fontsizecosts"] + "em";
-            alertSettings.font_size_username = HttpContext.Request.Query["fontsizeusername"] + "em";
             alertSettings.font_size_msg = HttpContext.Request.Query["fontsizemsg"] + "em";
             alertSettings.font_family = HttpContext.Request.Query["fontfamily"];
-            alertSettings.font_color_title = "#" + HttpContext.Request.Query["fontcolortitle"];
-            alertSettings.font_color_costs = "#" + HttpContext.Request.Query["fontcolorcosts"];
-            alertSettings.font_color_username = "#" + HttpContext.Request.Query["fontcolorusername"];
             alertSettings.font_color_msg = "#" + HttpContext.Request.Query["fontcolormsg"];
             alertSettings.sound = HttpContext.Request.Query["sound"];
             alertSettings.volume = HttpContext.Request.Query["volume"];
+
             return null;
         }
 
@@ -60,8 +56,8 @@ namespace RazorPagesTwitchPubSub.Pages
                 string time = item.data.timestamp.Substring(item.data.timestamp.IndexOf('T') + 1, 8);
                 pubSubObj.redeemed_at = date + " " + time;
                 pubSubObj.cost = item.data.redemption.reward.cost;
-                if(item.data.redemption.reward.image != null) pubSubObj.image = item.data.redemption.reward.image.url_1x;
-                if(item.data.redemption.reward.default_image != null) pubSubObj.default_image = item.data.redemption.reward.default_image.url_1x;
+                if(item.data.redemption.reward.image != null) pubSubObj.image = item.data.redemption.reward.image.url_4x;
+                if(item.data.redemption.reward.default_image != null) pubSubObj.default_image = item.data.redemption.reward.default_image.url_4x;
                 pubSubObj.user_input = item.data.redemption.user_input;
                 events.Add(pubSubObj);
             }
@@ -73,18 +69,13 @@ namespace RazorPagesTwitchPubSub.Pages
     }
 
     public class AlertSettings{
+        public string msg;
         public string duration;
         public string url;
         public string sound;
         public string volume;
         public string font_family;
-        public string font_size_title;
-        public string font_size_costs;
-        public string font_size_username;
         public string font_size_msg;
-        public string font_color_title;
-        public string font_color_costs;
-        public string font_color_username;
         public string font_color_msg;
     }
 }

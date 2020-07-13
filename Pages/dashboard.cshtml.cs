@@ -52,14 +52,10 @@ namespace RazorPagesTwitchPubSub.Pages
                     stream.Close();
                     jsonUserAuth = JsonSerializer.Deserialize<TwitchJsonHelper.JsonUserAuth>(jsonString);
                 }
-
-
-
                 var options = new CookieOptions
                 {
                     IsEssential = true
                 };
-
                 Response.Cookies.Delete("access_token");
                 Response.Cookies.Delete("refresh_token");
                 Response.Cookies.Append("access_token", jsonUserAuth.access_token, options);
@@ -101,8 +97,8 @@ namespace RazorPagesTwitchPubSub.Pages
                 string time = item.data.timestamp.Substring(item.data.timestamp.IndexOf('T') + 1, 8);
                 pubSubObj.redeemed_at = date + " " + time;
                 pubSubObj.cost = item.data.redemption.reward.cost;
-                if(item.data.redemption.reward.image != null) pubSubObj.image = item.data.redemption.reward.image.url_1x;
-                if(item.data.redemption.reward.default_image != null) pubSubObj.default_image = item.data.redemption.reward.default_image.url_1x;
+                if(item.data.redemption.reward.image != null) pubSubObj.image = item.data.redemption.reward.image.url_4x;
+                if(item.data.redemption.reward.default_image != null) pubSubObj.default_image = item.data.redemption.reward.default_image.url_4x;
                 pubSubObj.user_input = item.data.redemption.user_input;
                 events.Add(pubSubObj);
             }

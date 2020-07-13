@@ -26,7 +26,7 @@ namespace RazorPagesTwitchPubSub{
             
             // Read the old json file
             if(!File.Exists(websocketDataPath + userFileName)) CreateFile(websocketDataPath + userFileName);
-            using (FileStream fs = new FileStream(websocketDataPath + userFileName, FileMode.Open)){
+            using (FileStream fs = new FileStream(websocketDataPath + userFileName, FileMode.Create)){
                 try{
                 StreamReader reader = new StreamReader(fs);
                 string text = reader.ReadToEnd();

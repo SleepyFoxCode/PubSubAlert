@@ -28,6 +28,10 @@
         <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#pub_sub_alert_setting_container" aria-expanded="false" aria-controls="pub_sub_alert_setting_container">Settings</button>
         <span>(By refreshing this site or the alert window you clear all old redeems.)</span>
         <div id="pub_sub_alert_setting_container" class="collapse">
+            <div class="" style="display: flex;"> 
+                <label>Message</label>
+                <input id="msg_alert" type="text" class="" value="{user} redeemed {item} for {price}!">
+            </div>
             <div class="" style="display: flex;">
                 <label>Duration</label>
                 <input id="slider_alert_duration" class="" type="range" min="5" max="20" />
@@ -70,50 +74,19 @@
                 </select>
             </div>
             <div class="" style="display: flex;">
-                <label>Font-Size Title</label>
-                <input id="slider_font_size_title" class="" type="range" min="1" max="10" value="1" />
-                <label class="font_size_title_label" style="margin-left: 0.3em"></label>
-                <span style="margin-left: 1em;color:#7e8892;"> 1 is the font size of <b>this</b> text</span>
-            </div>
-            <div class="" style="display: flex;">
-                <label>Font-Size Costs</label>
-                <input id="slider_font_size_costs" class="" type="range" min="1" max="10" value="1" />
-                <label class="font_size_costs_label" style="margin-left: 0.3em"></label>
-            </div>
-            <div class="" style="display: flex;">
-                <label>Font-Size Username</label>
-                <input id="slider_font_size_username" class="" type="range" min="1" max="10" value="1" />
-                <label class="font_size_username_label" style="margin-left: 0.3em"></label>
-            </div>
-            <div class="" style="display: flex;">
-                <label>Font-Size Message</label>
-                <input id="slider_font_size_msg" class="" type="range" min="1" max="10" value="1" />
+                <label>Font-Size</label>
+                <input id="slider_font_size_msg" class="" type="range" min="1" max="20" value="10" />
                 <label class="font_size_msg_label" style="margin-left: 0.3em"></label>
             </div>
-            <div>
-                <label>Font-Color Title</label>
-                <input type="text" id="fontcolor_alert_title" placeholder="#FFFFFF"value="#212529" />
-                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
-            </div>
-            <div>
-                <label>Font-Color Costs</label>
-                <input type="text" id="fontcolor_alert_costs" placeholder="#FFFFFF"value="#212529" />
-                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
-            </div>
-            <div>
-                <label>Font-Color Username</label>
-                <input type="text" id="fontcolor_alert_username" placeholder="#FFFFFF"value="#212529" />
-                <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
-            </div>
-            <div>
-                <label>Font-Color message</label>
+            <div class="" style="display:flex">
+                <label>Font-Color</label>
                 <input type="text" id="fontcolor_alert_msg" placeholder="#FFFFFF"value="#212529" />
                 <a href="https://htmlcolorcodes.com/" target="_blank">Choose a color here!</a>
             </div>
             <button type="button" id="settings_save_alert_button" class="btn btn-success">Save</button>
             <button type="button" id="settings_restore_alert_button" class="btn btn-danger">Restore</button>
         </div>
-        <h5 id="pub_sub_event_title">Pub-Sub Events</h5>
+        <h5 id="pub_sub_event_title">Redeem Notifications</h5>
         <div id ="pub_sub_events_container" class="col-md-12">
             <ul id ="pub_sub_event_list"></ul>
         </div>
@@ -146,42 +119,12 @@ window.setInterval(function(){
 
 // JQuery functions so the sliders and all work
 $(document).ready(function() {
-  const $font_size_title_label = $('.font_size_title_label');
-  const $value = $('#slider_font_size_title');
-
-  $font_size_title_label.html($value.val());
-  $value.on('input change', () => {
-    $font_size_title_label.html($value.val());
-  });
-});
-
-$(document).ready(function() {
   const $font_size_msg_label = $('.font_size_msg_label');
   const $value = $('#slider_font_size_msg');
 
   $font_size_msg_label.html($value.val());
   $value.on('input change', () => {
     $font_size_msg_label.html($value.val());
-  });
-});
-
-$(document).ready(function() {
-  const $font_size_costs_label = $('.font_size_costs_label');
-  const $value = $('#slider_font_size_costs');
-
-  $font_size_costs_label.html($value.val());
-  $value.on('input change', () => {
-    $font_size_costs_label.html($value.val());
-  });
-});
-
-$(document).ready(function() {
-  const $font_size_username_label = $('.font_size_username_label');
-  const $value = $('#slider_font_size_username');
-
-  $font_size_username_label.html($value.val());
-  $value.on('input change', () => {
-    $font_size_username_label.html($value.val());
   });
 });
 
@@ -267,23 +210,22 @@ document.getElementById('testAlert').addEventListener("click", function(){
 // FUNCTIONS
 
 function saveAlertSettings(){
+    localStorage.setItem('settings_alert_msg', document.getElementById("msg_alert").value)
     localStorage.setItem('settings_alert_duration', document.getElementById("slider_alert_duration").value)
     localStorage.setItem('settings_alert_img', document.getElementById("image_alert_url").value)
     localStorage.setItem('settings_alert_sound', document.getElementById("sound_alert_selection").value)
     localStorage.setItem('settings_alert_volume', document.getElementById("slider_sound_volume").value)
     localStorage.setItem('settings_alert_fontfamily', document.getElementById("fontfamily_alert_selection").value)
-    localStorage.setItem('settings_alert_fontsize_title', document.getElementById("slider_font_size_title").value)
-    localStorage.setItem('settings_alert_fontsize_costs', document.getElementById("slider_font_size_costs").value)
-    localStorage.setItem('settings_alert_fontsize_username', document.getElementById("slider_font_size_username").value)
     localStorage.setItem('settings_alert_fontsize_msg', document.getElementById("slider_font_size_msg").value)
-    localStorage.setItem('settings_alert_fontcolor_title', document.getElementById("fontcolor_alert_title").value)
-    localStorage.setItem('settings_alert_fontcolor_costs', document.getElementById("fontcolor_alert_costs").value)
-    localStorage.setItem('settings_alert_fontcolor_username', document.getElementById("fontcolor_alert_username").value)
     localStorage.setItem('settings_alert_fontcolor_msg', document.getElementById("fontcolor_alert_msg").value)
 }
 
 // Restore all values in settings if they are saved in localstorage
 function restoreAlertSettings(){
+
+    if(localStorage.getItem('settings_alert_msg') != null){
+        document.getElementById("msg_alert").value = localStorage.getItem('settings_alert_msg')
+    }
     if(localStorage.getItem('settings_alert_duration') != null){
         document.getElementById("slider_alert_duration").value = localStorage.getItem('settings_alert_duration')
     }
@@ -299,26 +241,8 @@ function restoreAlertSettings(){
     if(localStorage.getItem('settings_alert_fontfamily') != null){
         document.getElementById("fontfamily_alert_selection").value = localStorage.getItem('settings_alert_fontfamily')
     }
-    if(localStorage.getItem('settings_alert_fontsize_title') != null){
-        document.getElementById("slider_font_size_title").value = localStorage.getItem('settings_alert_fontsize_title')
-    }
-    if(localStorage.getItem('settings_alert_fontsize_costs') != null){
-        document.getElementById("slider_font_size_costs").value = localStorage.getItem('settings_alert_fontsize_costs')
-    }
-    if(localStorage.getItem('settings_alert_fontsize_username') != null){
-        document.getElementById("slider_font_size_username").value = localStorage.getItem('settings_alert_fontsize_username')
-    }
     if(localStorage.getItem('settings_alert_fontsize_msg') != null){
         document.getElementById("slider_font_size_msg").value = localStorage.getItem('settings_alert_fontsize_msg')
-    }
-    if(localStorage.getItem('settings_alert_fontcolor_title') != null){
-        document.getElementById("fontcolor_alert_title").value = localStorage.getItem('settings_alert_fontcolor_title')
-    }
-    if(localStorage.getItem('settings_alert_fontcolor_costs') != null){
-        document.getElementById("fontcolor_alert_costs").value = localStorage.getItem('settings_alert_fontcolor_costs')
-    }
-    if(localStorage.getItem('settings_alert_fontcolor_username') != null){
-        document.getElementById("fontcolor_alert_username").value = localStorage.getItem('settings_alert_fontcolor_username')
     }
     if(localStorage.getItem('settings_alert_fontcolor_msg') != null){
         document.getElementById("fontcolor_alert_msg").value = localStorage.getItem('settings_alert_fontcolor_msg')
@@ -328,16 +252,11 @@ function restoreAlertSettings(){
 // Opens a new window to display incoming alerts
 function openAlertWindow(){
     // Get values from document
+    var alert_msg_val = document.getElementById("msg_alert").value
     var alert_duration_val = document.getElementById("slider_alert_duration").value;
     var alert_image_val = document.getElementById("image_alert_url").value;
     var alert_fontfamily_val = document.getElementById("fontfamily_alert_selection").value;
-    var alert_sliderfontsize_title_val = document.getElementById("slider_font_size_title").value;
-    var alert_sliderfontsize_costs_val = document.getElementById("slider_font_size_costs").value;
-    var alert_sliderfontsize_username_val = document.getElementById("slider_font_size_username").value;
-    var alert_sliderfontsize_msg_val = document.getElementById("slider_font_size_msg").value;
-    var alert_fontcolor_title_val = document.getElementById("fontcolor_alert_title").value;
-    var alert_fontcolor_costs_val = document.getElementById("fontcolor_alert_costs").value;
-    var alert_fontcolor_username_val = document.getElementById("fontcolor_alert_username").value;
+    var alert_sliderfontsize_msg_val = document.getElementById("slider_font_size_msg").value / 5;
     var alert_fontcolor_msg_val = document.getElementById("fontcolor_alert_msg").value;
     // We divide the value for volume by 100 because javascript only allows 0.0 - 1.0
     var alert_sound_volume_val = document.getElementById("slider_sound_volume").value / 100
@@ -345,15 +264,6 @@ function openAlertWindow(){
     var alert_sound_selection_val = document.getElementById("sound_alert_selection").value
 
     // We can't send get-parameters with a '#' in it. So we remove it
-    if(alert_fontcolor_title_val.includes('#')){
-        alert_fontcolor_title_val = alert_fontcolor_title_val.split('#').join('')
-    }
-    if(alert_fontcolor_costs_val.includes('#')){
-        alert_fontcolor_costs_val = alert_fontcolor_costs_val.split('#').join('')
-    }
-    if(alert_fontcolor_username_val.includes('#')){
-        alert_fontcolor_username_val = alert_fontcolor_username_val.split('#').join('')
-    }
     if(alert_fontcolor_msg_val.includes('#')){
         alert_fontcolor_msg_val = alert_fontcolor_msg_val.split('#').join('')
     }
@@ -361,16 +271,11 @@ function openAlertWindow(){
     //todo: remove spaces in input
     // Creating the url with get parameters (With an id because the alertwindow doesn't have cookies in obs)
     var urlString = "alertwindow?" + 
-    "duration=" + alert_duration_val +
+    "msg=" + alert_msg_val +
+    "&duration=" + alert_duration_val +
     "&image=" + alert_image_val +
-    "&fontfamily=" + alert_fontfamily_val +
-    "&fontsizetitle=" + alert_sliderfontsize_title_val + 
-    "&fontsizecosts=" + alert_sliderfontsize_costs_val + 
-    "&fontsizeusername=" + alert_sliderfontsize_username_val + 
+    "&fontfamily=" + alert_fontfamily_val + 
     "&fontsizemsg=" + alert_sliderfontsize_msg_val + 
-    "&fontcolortitle=" + alert_fontcolor_title_val +
-    "&fontcolorcosts=" + alert_fontcolor_costs_val +
-    "&fontcolorusername=" + alert_fontcolor_username_val +
     "&fontcolormsg=" + alert_fontcolor_msg_val +
     "&sound=" + alert_sound_selection_val +
     "&volume=" + alert_sound_volume_val +
