@@ -29,21 +29,21 @@
         <span>(By refreshing this site or the alert window you clear all old redeems.)</span>
         <div id="alertwindow-settings-container" class="collapse">
             <div class="alertwindow-settings-item" style="display: flex;"> 
-                <label>Message</label>
-                <input id="alertwindow-settings-msg" type="text" class="" value="{user} redeemed {item} for {price}!">
+                <label class="alertwindow-settings-item-label">Message</label>
+                <input class="alertwindow-settings-item-input" id="alertwindow-settings-msg" type="text" value="{user} redeemed {item} for {price}!">
             </div>
             <div class="alertwindow-settings-item" style="display: flex;">
-                <label>Duration</label>
-                <input id="alertwindow-settings-duration" class="" type="range" min="5" max="20" />
+                <label class="alertwindow-settings-item-label">Duration</label>
+                <input id="alertwindow-settings-duration" class="alertwindow-settings-item-input" type="range" min="5" max="20" />
                 <label class="alertwindow-settings-duration-label" style="margin-left: 0.3em"></label>
             </div>
             <div class="alertwindow-settings-item">
-                <label>Image</label>
-                <input type="text" id="alertwindow-settings-img" placeholder="URL" value="" />
+                <label class="alertwindow-settings-item-label">Image</label>
+                <input class="alertwindow-settings-item-input" type="text" id="alertwindow-settings-img" placeholder="https://www.example.com/image.png" value="" />
                 <span style="margin-left: 1em;color:#7e8892;">It's important to use a direct link to an image or gif</span>
             </div>
             <div class="alertwindow-settings-item">
-                <label>Alert Sound</label>
+                <label class="alertwindow-settings-item-label">Alert Sound</label>
                 <select id="alertwindow-settings-sound">
                     <option style="">1</option>
                     <option style="">2</option>
@@ -51,12 +51,12 @@
                 <button type="button" id="alertwindow-settings-soundplay-btn">Play</button>
             </div>
             <div class="alertwindow-settings-item" style="display: flex;">
-                <label>Sound Volume</label>
-                <input id="alertwindow-settings-soundvolume" class="" type="range" min="1" max="100" value="50" />
+                <label class="alertwindow-settings-item-label">Sound Volume</label>
+                <input id="alertwindow-settings-soundvolume" class="alertwindow-settings-item-input" type="range" min="1" max="100" value="50" />
                 <label class="alertwindow-settings-soundvolume-label" style="margin-left: 0.3em"></label>
             </div>
             <div class="alertwindow-settings-item">
-                <label>Font-Family</label>
+                <label class="alertwindow-settings-item-label">Font-Family</label>
                 <select id="alertwindow-settings-fontfamily">
                     <option style="font-family:roboto">Roboto</option>
                     <option style="font-family:bangers">Bangers</option>
@@ -74,13 +74,13 @@
                 </select>
             </div>
             <div class="alertwindow-settings-item" style="display: flex;">
-                <label>Font-Size</label>
-                <input id="alertwindow-settings-fontsize" class="" type="range" min="5" max="20" value="10" />
+                <label class="alertwindow-settings-item-label">Font-Size</label>
+                <input class="alertwindow-settings-item-input" id="alertwindow-settings-fontsize" type="range" min="5" max="20" value="10" />
                 <label class="alertwindow-settings-fontsize-label" style="margin-left: 0.3em"></label>
             </div>
             <div class="alertwindow-settings-item" style="display:flex">
-                <label>Font-Color</label>
-                <input type="text" id="alertwindow-settings-fontcolor" placeholder="#FFFFFF"value="#212529" />
+                <label class="alertwindow-settings-item-label">Font-Color</label>
+                <input class="alertwindow-settings-item-input" type="text" id="alertwindow-settings-fontcolor" value="#FFFFFF" />
                 <a href="https://htmlcolorcodes.com/" target="_blank" style="margin-left: 0.5em;">Choose a color</a>
             </div>
             <div id="settings-btn-container">

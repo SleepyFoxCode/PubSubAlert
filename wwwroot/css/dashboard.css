@@ -14,6 +14,10 @@
 
 }
 
+.alertwindow-settings-item-label{
+    width: 15%;
+}
+
 #notification-container-title{
     margin-top: 1em;
 }
@@ -86,4 +90,8 @@
 
 #settings-btn-container{
     margin-top: 1em;
+}
+
+.alertwindow-settings-item-input {
+    width: 30%;
 }
