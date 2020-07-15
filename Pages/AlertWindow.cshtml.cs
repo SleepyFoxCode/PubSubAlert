@@ -29,9 +29,9 @@ namespace RazorPagesTwitchPubSub.Pages
             alertSettings.msg = HttpContext.Request.Query["msg"];
             alertSettings.duration = HttpContext.Request.Query["duration"];
             alertSettings.url = HttpContext.Request.Query["img"];
-            alertSettings.font_size_msg = HttpContext.Request.Query["fontsize"] + "em";
-            alertSettings.font_family = HttpContext.Request.Query["fontfamily"];
-            alertSettings.font_color_msg = "#" + HttpContext.Request.Query["fontcolor"];
+            alertSettings.fontSize = HttpContext.Request.Query["fontsize"] + "em";
+            alertSettings.fontFamily = HttpContext.Request.Query["fontfamily"];
+            alertSettings.fontColor = "#" + HttpContext.Request.Query["fontcolor"];
             alertSettings.sound = HttpContext.Request.Query["sound"];
             alertSettings.volume = HttpContext.Request.Query["volume"];
 
@@ -74,8 +74,8 @@ namespace RazorPagesTwitchPubSub.Pages
         public string url;
         public string sound;
         public string volume;
-        public string font_family;
-        public string font_size_msg;
-        public string font_color_msg;
+        public string fontFamily;
+        public string fontSize;
+        public string fontColor;
     }
 }

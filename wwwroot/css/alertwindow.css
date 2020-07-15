@@ -17,7 +17,6 @@
 #alert{
     margin-right: auto;
     margin-left: auto;
-    width: max-content;
     text-align: center;
     margin-top: 3em;
     display: none;
@@ -29,22 +28,19 @@
 }
 
 #alert-msg{
-    max-width: 400px;
-    word-break: break-all;
-    font-style: italic;
     font-weight: bold;
     word-break: break-word;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.5em;
 }
 
-#alert_user_msg{
+#alert-user-msg{
+    font-style: italic;
     word-break: break-word;
-    font-style:italic;
     margin-left:auto;
     margin-right: auto;
-    font-size:1.7em;
-
+    margin-top: 0.5em;
 }
 
 #costs{
