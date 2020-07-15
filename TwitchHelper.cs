@@ -35,6 +35,10 @@ namespace RazorPagesTwitchPubSub{
                     }
                 }
             }
+            catch(WebException){
+                // We don't this exception because it just means that the access token is not valid anymore. A new one will be created
+                return false;
+            }
             catch(Exception e){
                 Log.WriteToLog(e.ToString());
                 return false;
