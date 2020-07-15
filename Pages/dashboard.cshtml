@@ -7,8 +7,8 @@
 
 
 @Html.AntiForgeryToken()
-<div id="main_container" class="col-md-12">
-    <div id="welcome_container">
+<div id="main" class="col-md-12">
+    <div id="welcome-container">
         <h1>Welcome @Model.user.information.display_name!</h1>
         <p>
             This page enables you to see all incoming redemptions on your channel. <br>
@@ -22,42 +22,42 @@
         </p>
     </div>
     <hr/>
-    <div id="pub_sub_container" class="col-md-12">
-        <button type="button" class="btn btn-primary" id="openAlertWindow">Open Alert Window</button>
-        <button type="button" class="btn btn-info" id="testAlert">Test Alert</button>
-        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#pub_sub_alert_setting_container" aria-expanded="false" aria-controls="pub_sub_alert_setting_container">Settings</button>
+    <div id="pubsub-container" class="col-md-12">
+        <button type="button" class="btn btn-primary" id="alertwindow-open-btn">Open Alert Window</button>
+        <button type="button" class="btn btn-info" id="testalert-send-btn">Test Alert</button>
+        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#alertwindow-settings-container" aria-expanded="false" aria-controls="alertwindow-settings-container">Settings</button>
         <span>(By refreshing this site or the alert window you clear all old redeems.)</span>
-        <div id="pub_sub_alert_setting_container" class="collapse">
-            <div class="" style="display: flex;"> 
+        <div id="alertwindow-settings-container" class="collapse">
+            <div class="alertwindow-settings-item" style="display: flex;"> 
                 <label>Message</label>
-                <input id="msg_alert" type="text" class="" value="{user} redeemed {item} for {price}!">
+                <input id="alertwindow-settings-msg" type="text" class="" value="{user} redeemed {item} for {price}!">
             </div>
-            <div class="" style="display: flex;">
+            <div class="alertwindow-settings-item" style="display: flex;">
                 <label>Duration</label>
-                <input id="slider_alert_duration" class="" type="range" min="5" max="20" />
-                <label class="durationLabel" style="margin-left: 0.3em"></label>
+                <input id="alertwindow-settings-duration" class="" type="range" min="5" max="20" />
+                <label class="alertwindow-settings-duration-label" style="margin-left: 0.3em"></label>
             </div>
-            <div>
+            <div class="alertwindow-settings-item">
                 <label>Image</label>
-                <input type="text" id="image_alert_url" placeholder="URL" value="" />
+                <input type="text" id="alertwindow-settings-img" placeholder="URL" value="" />
                 <span style="margin-left: 1em;color:#7e8892;">It's important to use a direct link to an image or gif</span>
             </div>
-            <div class="">
+            <div class="alertwindow-settings-item">
                 <label>Alert Sound</label>
-                <select id="sound_alert_selection">
+                <select id="alertwindow-settings-sound">
                     <option style="">1</option>
                     <option style="">2</option>
                 </select>
-                <button type="button" id="sound_selection_button">Play</button>
+                <button type="button" id="alertwindow-settings-soundplay-btn">Play</button>
             </div>
-            <div class="" style="display: flex;">
+            <div class="alertwindow-settings-item" style="display: flex;">
                 <label>Sound Volume</label>
-                <input id="slider_sound_volume" class="" type="range" min="1" max="100" value="50" />
-                <label class="sound_volume_label" style="margin-left: 0.3em"></label>
+                <input id="alertwindow-settings-soundvolume" class="" type="range" min="1" max="100" value="50" />
+                <label class="alertwindow-settings-soundvolume-label" style="margin-left: 0.3em"></label>
             </div>
-            <div class="">
+            <div class="alertwindow-settings-item">
                 <label>Font-Family</label>
-                <select id="fontfamily_alert_selection">
+                <select id="alertwindow-settings-fontfamily">
                     <option style="font-family:roboto">Roboto</option>
                     <option style="font-family:bangers">Bangers</option>
                     <option style="font-family:Arial">Arial</option>
@@ -73,24 +73,27 @@
                     <option style="font-family:Brush Script MT">Brush Script MT</option>
                 </select>
             </div>
-            <div class="" style="display: flex;">
+            <div class="alertwindow-settings-item" style="display: flex;">
                 <label>Font-Size</label>
-                <input id="slider_font_size_msg" class="" type="range" min="1" max="20" value="10" />
-                <label class="font_size_msg_label" style="margin-left: 0.3em"></label>
+                <input id="alertwindow-settings-fontsize" class="" type="range" min="1" max="20" value="10" />
+                <label class="alertwindow-settings-fontsize-label" style="margin-left: 0.3em"></label>
             </div>
-            <div class="" style="display:flex">
+            <div class="alertwindow-settings-item" style="display:flex">
                 <label>Font-Color</label>
-                <input type="text" id="fontcolor_alert_msg" placeholder="#FFFFFF"value="#212529" />
+                <input type="text" id="alertwindow-settings-fontcolor" placeholder="#FFFFFF"value="#212529" />
                 <a href="https://htmlcolorcodes.com/" target="_blank" style="margin-left: 0.5em;">Choose a color</a>
             </div>
-            <div id="settings_buttons">
-                <button type="button" id="settings_save_alert_button" class="btn btn-success">Save</button>
-                <button type="button" id="settings_restore_alert_button" class="btn btn-danger">Restore</button>
+            <div id="settings-btn-container">
+                <button type="button" id="alertwindow-settings-save-btn" class="btn btn-success">Save</button>
+                <button type="button" id="alertwindow-settings-restore-btn" class="btn btn-danger">Restore</button>
             </div>
         </div>
-        <h5 id="pub_sub_event_title">Redeem Notifications</h5>
-        <div id ="pub_sub_events_container" class="col-md-12">
-            <ul id ="pub_sub_event_list"></ul>
+
+
+
+        <h5 id="notification-container-title">Redeem Notifications</h5>
+        <div id ="notification-container" class="col-md-12">
+            <ul id ="notification-list"></ul>
         </div>
     </div>
 </div>
@@ -98,7 +101,7 @@
 <script language="javascript" type="text/javascript">
 // GLOBAL VARIABLES
 
-var pub_sub_queue = [];
+var pubsubNotifications = [];
 
 // DOCUMENT READY
 
@@ -109,40 +112,40 @@ $(document).ready(function() {
 
 // INTERVALS
 
-// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pubsubNotifications array
 window.setInterval(function(){
-    checkForPubSubEvents()
+    checkForPubSubNotifications()
 }, 10000);
 
-// We check if events are in the queue. If yes, [0] will be played and removed
+// We check if notifications are in the queue. If yes, [0] will be played and removed
 window.setInterval(function(){
-    if(pub_sub_queue.length > 0) pubSubAlert()
+    if(pubsubNotifications.length > 0) pubSubAlert()
 }, 5000);
 
 // JQuery functions so the sliders and all work
 $(document).ready(function() {
-  const $font_size_msg_label = $('.font_size_msg_label');
-  const $value = $('#slider_font_size_msg');
+  const $fontSizeMsgLabel = $('.alertwindow-settings-fontsize-label');
+  const $value = $('#alertwindow-settings-fontsize');
 
-  $font_size_msg_label.html($value.val());
+  $fontSizeMsgLabel.html($value.val());
   $value.on('input change', () => {
-    $font_size_msg_label.html($value.val());
+    $fontSizeMsgLabel.html($value.val());
   });
 });
 
 $(document).ready(function() {
-  const $sound_volume_label = $('.sound_volume_label');
-  const $value = $('#slider_sound_volume');
+  const $soundVolumeLabel = $('.alertwindow-settings-soundvolume-label');
+  const $value = $('#alertwindow-settings-soundvolume');
 
-  $sound_volume_label.html($value.val());
+  $soundVolumeLabel.html($value.val());
   $value.on('input change', () => {
-    $sound_volume_label.html($value.val());
+    $soundVolumeLabel.html($value.val());
   });
 });
 
 $(document).ready(function() {
-  const $durationLabel = $('.durationLabel');
-  const $value = $('#slider_alert_duration');
+  const $durationLabel = $('.alertwindow-settings-duration-label');
+  const $value = $('#alertwindow-settings-duration');
 
   $durationLabel.html($value.val());
   $value.on('input change', () => {
@@ -154,9 +157,9 @@ $(document).ready(function() {
 // EVENTLISTENERS
 
 // Listener for button to play the currently selected sound
-document.getElementById("sound_selection_button").addEventListener("click", function(){
-    var volume = document.getElementById("slider_sound_volume").value / 100
-    var selection = document.getElementById("sound_alert_selection").value
+document.getElementById("alertwindow-settings-soundplay-btn").addEventListener("click", function(){
+    var volume = document.getElementById("alertwindow-settings-soundvolume").value / 100
+    var selection = document.getElementById("alertwindow-settings-sound").value
     var audio;
 
     switch(parseInt(selection)){
@@ -172,21 +175,21 @@ document.getElementById("sound_selection_button").addEventListener("click", func
 },false)
 
 // Listener for button to save all settings for the alert in the localstorage
-document.getElementById("settings_save_alert_button").addEventListener("click", function(){
+document.getElementById("alertwindow-settings-save-btn").addEventListener("click", function(){
     saveAlertSettings();
 }, false)
 
 // Listener for button to restore all settings back to the saved ones in the localstorage
-document.getElementById("settings_restore_alert_button").addEventListener("click", function(){
+document.getElementById("alertwindow-settings-restore-btn").addEventListener("click", function(){
     restoreAlertSettings()
 }, false)
 
-document.getElementById('openAlertWindow').addEventListener("click", function() {
+document.getElementById('alertwindow-open-btn').addEventListener("click", function() {
     openAlertWindow();
 }, false);
 
-// puts test data into the websocket pubsub files to create a test alert/event
-document.getElementById('testAlert').addEventListener("click", function(){
+// puts test data into the websocket pubsub files to create a test alert/notification
+document.getElementById('testalert-send-btn').addEventListener("click", function(){
    $.ajax({
         type: "POST",
         url: 'dashboard?handler=GetNewPubSubsTest', 
@@ -203,7 +206,7 @@ document.getElementById('testAlert').addEventListener("click", function(){
             json = JSON.parse(data)
             
             for(var i = 0; i < json.length; i++){
-                pub_sub_queue.push(json[i]);
+                pubsubNotifications.push(json[i]);
             }
         }
    })
@@ -212,75 +215,73 @@ document.getElementById('testAlert').addEventListener("click", function(){
 // FUNCTIONS
 
 function saveAlertSettings(){
-    localStorage.setItem('settings_alert_msg', document.getElementById("msg_alert").value)
-    localStorage.setItem('settings_alert_duration', document.getElementById("slider_alert_duration").value)
-    localStorage.setItem('settings_alert_img', document.getElementById("image_alert_url").value)
-    localStorage.setItem('settings_alert_sound', document.getElementById("sound_alert_selection").value)
-    localStorage.setItem('settings_alert_volume', document.getElementById("slider_sound_volume").value)
-    localStorage.setItem('settings_alert_fontfamily', document.getElementById("fontfamily_alert_selection").value)
-    localStorage.setItem('settings_alert_fontsize_msg', document.getElementById("slider_font_size_msg").value)
-    localStorage.setItem('settings_alert_fontcolor_msg', document.getElementById("fontcolor_alert_msg").value)
+    localStorage.setItem('alertwindow-settings-msg', document.getElementById("alertwindow-settings-msg").value)
+    localStorage.setItem('alertwindow-settings-duration', document.getElementById("alertwindow-settings-duration").value)
+    localStorage.setItem('alertwindow-settings-img', document.getElementById("alertwindow-settings-img").value)
+    localStorage.setItem('alertwindow-settings-sound', document.getElementById("alertwindow-settings-sound").value)
+    localStorage.setItem('alertwindow-settings-soundvolume', document.getElementById("alertwindow-settings-soundvolume").value)
+    localStorage.setItem('alertwindow-settings-fontfamily', document.getElementById("alertwindow-settings-fontfamily").value)
+    localStorage.setItem('alertwindow-settings-fontsize', document.getElementById("alertwindow-settings-fontsize").value)
+    localStorage.setItem('alertwindow-settings-fontcolor', document.getElementById("alertwindow-settings-fontcolor").value)
 }
 
 // Restore all values in settings if they are saved in localstorage
 function restoreAlertSettings(){
 
-    if(localStorage.getItem('settings_alert_msg') != null){
-        document.getElementById("msg_alert").value = localStorage.getItem('settings_alert_msg')
+    if(localStorage.getItem('alertwindow-settings-msg') != null){
+        document.getElementById("alertwindow-settings-msg").value = localStorage.getItem('alertwindow-settings-msg')
     }
-    if(localStorage.getItem('settings_alert_duration') != null){
-        document.getElementById("slider_alert_duration").value = localStorage.getItem('settings_alert_duration')
+    if(localStorage.getItem('alertwindow-settings-duration') != null){
+        document.getElementById("alertwindow-settings-duration").value = localStorage.getItem('alertwindow-settings-duration')
     }
-    if(localStorage.getItem('settings_alert_img') != null){
-        document.getElementById("image_alert_url").value = localStorage.getItem('settings_alert_img')
+    if(localStorage.getItem('alertwindow-settings-img') != null){
+        document.getElementById("alertwindow-settings-img").value = localStorage.getItem('alertwindow-settings-img')
     }
-    if(localStorage.getItem('settings_alert_sound') != null){
-        document.getElementById("sound_alert_selection").value = localStorage.getItem('settings_alert_sound')
+    if(localStorage.getItem('alertwindow-settings-sound') != null){
+        document.getElementById("alertwindow-settings-sound").value = localStorage.getItem('alertwindow-settings-sound')
     }
-    if(localStorage.getItem('settings_alert_volume') != null){
-        document.getElementById("slider_sound_volume").value = localStorage.getItem('settings_alert_volume')
+    if(localStorage.getItem('alertwindow-settings-soundvolume') != null){
+        document.getElementById("alertwindow-settings-soundvolume").value = localStorage.getItem('alertwindow-settings-soundvolume')
     }
-    if(localStorage.getItem('settings_alert_fontfamily') != null){
-        document.getElementById("fontfamily_alert_selection").value = localStorage.getItem('settings_alert_fontfamily')
+    if(localStorage.getItem('alertwindow-settings-fontfamily') != null){
+        document.getElementById("alertwindow-settings-fontfamily").value = localStorage.getItem('alertwindow-settings-fontfamily')
     }
-    if(localStorage.getItem('settings_alert_fontsize_msg') != null){
-        document.getElementById("slider_font_size_msg").value = localStorage.getItem('settings_alert_fontsize_msg')
+    if(localStorage.getItem('alertwindow-settings-fontsize') != null){
+        document.getElementById("alertwindow-settings-fontsize").value = localStorage.getItem('alertwindow-settings-fontsize')
     }
-    if(localStorage.getItem('settings_alert_fontcolor_msg') != null){
-        document.getElementById("fontcolor_alert_msg").value = localStorage.getItem('settings_alert_fontcolor_msg')
+    if(localStorage.getItem('alertwindow-settings-fontcolor') != null){
+        document.getElementById("alertwindow-settings-fontcolor").value = localStorage.getItem('alertwindow-settings-fontcolor')
     }
 }
 
 // Opens a new window to display incoming alerts
 function openAlertWindow(){
     // Get values from document
-    var alert_msg_val = document.getElementById("msg_alert").value
-    var alert_duration_val = document.getElementById("slider_alert_duration").value;
-    var alert_image_val = document.getElementById("image_alert_url").value;
-    var alert_fontfamily_val = document.getElementById("fontfamily_alert_selection").value;
-    var alert_sliderfontsize_msg_val = document.getElementById("slider_font_size_msg").value / 5;
-    var alert_fontcolor_msg_val = document.getElementById("fontcolor_alert_msg").value;
-    // We divide the value for volume by 100 because javascript only allows 0.0 - 1.0
-    var alert_sound_volume_val = document.getElementById("slider_sound_volume").value / 100
-    // We substract by 1 so we can use it as an index
-    var alert_sound_selection_val = document.getElementById("sound_alert_selection").value
+    var alertMsgVal = document.getElementById("alertwindow-settings-msg").value
+    var alertDurationVal = document.getElementById("alertwindow-settings-duration").value;
+    var alertImageVal = document.getElementById("alertwindow-settings-img").value;
+    var alertFontfamilyVal = document.getElementById("alertwindow-settings-fontfamily").value;
+    var alertFontsizeVal = document.getElementById("alertwindow-settings-fontsize").value / 5;
+    var alertFontcolorVal = document.getElementById("alertwindow-settings-fontcolor").value;
+    var alertSoundVolumeVal = document.getElementById("alertwindow-settings-soundvolume").value / 100
+    var alertSoundSelectionVal = document.getElementById("alertwindow-settings-sound").value
 
     // We can't send get-parameters with a '#' in it. So we remove it
-    if(alert_fontcolor_msg_val.includes('#')){
-        alert_fontcolor_msg_val = alert_fontcolor_msg_val.split('#').join('')
+    if(alertFontcolorVal.includes('#')){
+        alertFontcolorVal = alertFontcolorVal.split('#').join('')
     }
 
-    //todo: remove spaces in input
+    // todo: remove spaces in input
     // Creating the url with get parameters (With an id because the alertwindow doesn't have cookies in obs)
     var urlString = "alertwindow?" + 
-    "msg=" + alert_msg_val +
-    "&duration=" + alert_duration_val +
-    "&image=" + alert_image_val +
-    "&fontfamily=" + alert_fontfamily_val + 
-    "&fontsizemsg=" + alert_sliderfontsize_msg_val + 
-    "&fontcolormsg=" + alert_fontcolor_msg_val +
-    "&sound=" + alert_sound_selection_val +
-    "&volume=" + alert_sound_volume_val +
+    "msg=" + alertMsgVal +
+    "&duration=" + alertDurationVal +
+    "&img=" + alertImageVal +
+    "&fontfamily=" + alertFontfamilyVal + 
+    "&fontsize=" + alertFontsizeVal + 
+    "&fontcolor=" + alertFontcolorVal +
+    "&sound=" + alertSoundSelectionVal +
+    "&volume=" + alertSoundVolumeVal +
     "&id=" + @Model.user.information.id
 
     window.open(urlString, "targetWindow", 'toolbar=no, status=no, menubar=no, scrollbars=no, resizable=yes, width=800, height=600');
@@ -289,43 +290,43 @@ function openAlertWindow(){
 
 function pubSubAlert(){
     // We create the dom-list-element to display on the document
-    var ulist = document.getElementById('pub_sub_event_list');
+    var ulist = document.getElementById('notification-list');
         var listElement = document.createElement("li");
-        listElement.className = "pub_sub_event_list_item";
+        listElement.className = "notification-list-item";
             var header = document.createElement("div");
-            header.className = "pub_sub_event_list_item_header_container";
-                var header_img = document.createElement("img");
-                if(pub_sub_queue[0].image != null){
-                    header_img.setAttribute("src", pub_sub_queue[0].image)
+            header.className = "notification-list-item-header";
+                var headerImg = document.createElement("img");
+                if(pubsubNotifications[0].image != null){
+                    headerImg.setAttribute("src", pubsubNotifications[0].image)
                 }
                 else{
-                    header_img.setAttribute("src", pub_sub_queue[0].default_image)
+                    headerImg.setAttribute("src", pubsubNotifications[0].default_image)
                 }
-                header_img.className = "pub_sub_event_list_item_header_img"
-                header.appendChild(header_img);
+                headerImg.className = "notification-list-item-header-img"
+                header.appendChild(headerImg);
 
                 var title = document.createElement("div");
-                title.className = "pub_sub_event_list_item_header_title";
-                title.appendChild(document.createTextNode(pub_sub_queue[0].title))
+                title.className = "notification-list-item-header-title";
+                title.appendChild(document.createTextNode(pubsubNotifications[0].title))
                 header.appendChild(title)
 
                 var cost = document.createElement("div");
-                cost.className = "pub_sub_event_list_item_header_cost";
-                cost.appendChild(document.createTextNode(pub_sub_queue[0].cost))
+                cost.className = "notification-list-item-header-cost";
+                cost.appendChild(document.createTextNode(pubsubNotifications[0].cost))
                 header.appendChild(cost);
 
             var username = document.createElement("div");
-            username.className = "pub_sub_event_list_item_username";
-            username.appendChild(document.createTextNode(pub_sub_queue[0].display_name))
+            username.className = "notification-list-item-body-username";
+            username.appendChild(document.createTextNode(pubsubNotifications[0].display_name))
             var msg = document.createElement("div");
-            msg.className = "pub_sub_event_list_item_msg";
+            msg.className = "notification-list-item-body-msg";
             // user_input can be empty so we check
-            if(pub_sub_queue[0].user_input != null){
-                msg.appendChild(document.createTextNode('"' + pub_sub_queue[0].user_input + '"'))
+            if(pubsubNotifications[0].user_input != null){
+                msg.appendChild(document.createTextNode('"' + pubsubNotifications[0].user_input + '"'))
             }
             var timestamp = document.createElement("div");
-            timestamp.className = "pub_sub_event_list_item_timestamp";
-            timestamp.appendChild(document.createTextNode(pub_sub_queue[0].redeemed_at))
+            timestamp.className = "notification-list-item-body-timestamp";
+            timestamp.appendChild(document.createTextNode(pubsubNotifications[0].redeemed_at))
 
         listElement.appendChild(header);
         listElement.appendChild(username);
@@ -334,16 +335,16 @@ function pubSubAlert(){
     // Push the element to the beginning if list is not empty
     if(ulist.childElementCount > 0){
         ulist.insertBefore(listElement, ulist.firstChild);
-        pub_sub_queue.shift();
+        pubsubNotifications.shift();
     }
     else ulist.appendChild(listElement)
 
     // Remove first alert from the queue because be displayed it now
-    pub_sub_queue.shift();
+    pubsubNotifications.shift();
 }
 
-// Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
-function checkForPubSubEvents() {
+// Check for new alerts from our websocket. If new alerts are fetched they will be added to pubsubNotifications array
+function checkForPubSubNotifications() {
    $.ajax({
         type: "POST",
         url: 'dashboard?handler=GetNewPubSubs', 
@@ -360,7 +361,7 @@ function checkForPubSubEvents() {
             json = JSON.parse(data)
             
             for(var i = 0; i < json.length; i++){
-                pub_sub_queue.push(json[i]);
+                pubsubNotifications.push(json[i]);
             }
         }
    })

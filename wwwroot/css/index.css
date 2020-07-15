@@ -1,21 +1,29 @@
-#main_container_introduction{
+#main-container{
+
+}
+
+#main-container-introduction{
     text-align: center;
 }
 
-#presentation_img{
+#presentation-img-container{
+
+}
+
+#presentation-img{
     max-width: 40em;
     border-radius: 1em;
 }
 
-.social_logo{
+.social-logo{
     max-width: 6em;
 }
 
-#main_container_social{
+#main-container-social{
     margin-top: 3em;
 }
 
-#start_now_btn{
+#startnow-btn{
     margin-top: 1em;
     width: 10em;
 }

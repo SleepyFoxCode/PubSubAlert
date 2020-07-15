@@ -1,11 +1,33 @@
-#pub_sub_event_title{
+#main{
+
+}
+
+#welcome-container{
+
+}
+
+#pubsub-container{
+
+}
+
+.alertwindow-settings-item{
+
+}
+
+#notification-container-title{
     margin-top: 1em;
 }
-#pub_sub_event_list{
+
+#notification-container{
+
+}
+
+#notification-list{
     list-style: none;
 }
 
-.pub_sub_event_list_item{
+
+.notification-list-item{
     min-height: 2em;
     background-color: #d3e2e2;
     padding: 1em;
@@ -13,52 +35,55 @@
     margin-top: 1em;
 }
 
-.pub_sub_event_list_item:first-child{
+.notification-list-item:first-child{
     margin-top: 0em;
 }
 
-.pub_sub_event_list_item_header_container{
+.notification-list-item-header{
     display: flex;
     flex-direction: row;
     height: 100%;
 }
 
-.pub_sub_event_list_item_header_img{
+.notification-list-item-header-img{
     width: 5%;
 }
 
-.pub_sub_event_list_item_header_title{
+.notification-list-item-header-title{
     width: 83%;
     padding-left: 0.5em;
     font-weight: bold;
 }
 
-.pub_sub_event_list_item_header_cost{
+.notification-list-item-header-cost{
     text-align: right;
     width: 10%;
 }
 
-.pub_sub_event_list_item_username{
+.notification-list-item-body-username{
 
 }
 
-.pub_sub_event_list_item_msg {
+.notification-list-item-body-msg {
     font-style: italic;
 }
 
-#pub_sub_alert_setting_container {
+
+
+
+#alertwindow-settings-container {
     margin-left: 4em;
-    margin-top:1em;
+    margin-top: 1em;
 }
 
-#msg_alert{
+#alertwindow-settings-item-msg{
     width: 30%;
 }
 
-#image_alert_url{
+#alertwindow-settings-image{
     width: 50%;
 }
 
-#settings_buttons{
+#settings-btn-container{
     margin-top: 1em;
 }

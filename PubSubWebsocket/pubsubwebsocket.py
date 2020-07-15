@@ -72,7 +72,7 @@ class Connection:
             return await self.listen_to_server()
 
 def write_pubsub_file(json_obj, channel_id, folder):
-    newJsonObject = None
+    new_json_obj = None
     if not os.path.exists(folder + channel_id + ".json"):
         tmp_file = open(folder + channel_id + ".json", "w")
         tmp_file.flush()
@@ -82,17 +82,17 @@ def write_pubsub_file(json_obj, channel_id, folder):
     if os.stat(folder + channel_id + ".json").st_size == 0:
         empty_json_obj = []
         empty_json_obj.append(json_obj)
-        newJsonObject = empty_json_obj
+        new_json_obj = empty_json_obj
 
     else:
         old_json_string = json.loads(json_file.read())
         old_json_obj = old_json_string
         old_json_obj.append(json_obj)
-        newJsonObject = old_json_obj
+        new_json_obj = old_json_obj
     json_file.close()
 
     json_file = open(folder + channel_id + ".json", "w")
-    json.dump(newJsonObject, json_file)
+    json.dump(new_json_obj, json_file)
     json_file.flush()
     json_file.close()
 
@@ -148,11 +148,11 @@ async def continuing_update_user_list():
         adjusted_new_user_list.extend(new_user_list)
         #Check if any user is new. If yes, create new user and connect it
         for item in new_user_list:
-            for conItem in connected_user:
-                if item.channel_id == conItem.channel_id:
-                    if item.access_token != conItem.access_token:
-                        conItem.access_token = item.access_token
-                        print("Updated Access-Token for {}".format(conItem.channel_id))
+            for con_item in connected_user:
+                if item.channel_id == con_item.channel_id:
+                    if item.access_token != con_item.access_token:
+                        con_item.access_token = item.access_token
+                        print("Updated Access-Token for {}".format(con_item.channel_id))
                     adjusted_new_user_list.remove(item)
 
         for item in adjusted_new_user_list:

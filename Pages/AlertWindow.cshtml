@@ -21,9 +21,9 @@
 @Html.AntiForgeryToken()
     <div id="main">
         <div id="alert">
-            <img class="image" src="@Model.alertSettings.url"/>
-            <label id="msg" style="color:@Model.alertSettings.font_color_msg; font-weight:bold;word-break:break-word; margin-left:auto; margin-right: auto; font-size:@Model.alertSettings.font_size_msg; font-family:@Model.alertSettings.font_family;"></label>    
-            <label id="user_msg" style="color:@Model.alertSettings.font_color_msg; word-break:break-word; font-style:italic; margin-left:auto; margin-right: auto; font-size:1.7em; font-family:@Model.alertSettings.font_family;"></label>        
+            <img id="alert-image" src="@Model.alertSettings.url"/>
+            <label id="alert-msg" style="color:@Model.alertSettings.font_color_msg; font-size:@Model.alertSettings.font_size_msg; font-family:@Model.alertSettings.font_family;"></label>    
+            <label id="alert-user-msg" style="color:@Model.alertSettings.font_color_msg; font-family:@Model.alertSettings.font_family;"></label>        
         </div>
     </div>
 </body>
@@ -33,19 +33,19 @@
 
 <script language="javascript" type="text/javascript">
 // Object that we use to store the current object to update the alert in the html documnent when an alert occurs
-var alert_obj = {
+var pubsubAlertObj = {
     title: null,
-    usermsg: null,
+    userMsg: null,
     cost: null,
     img: null,
-    default_img: null,
+    defaultImg: null,
     user: null
 }
 
 // Array to store all events that needs to be played. Event that was played will be removed
-var alert_queue = [];
+var pubsubAlerts = [];
 // To check if an alert is currently playing. If yes, the function will be skipped
-var alert_playing = false;
+var alertPlaying = false;
 
 // Check for new alerts from our websocket. If new alerts are fetched they will be added to pub_sub_queue array
 var checkInterval = setInterval(function(){
@@ -54,8 +54,8 @@ var checkInterval = setInterval(function(){
 
 // We check if events are in the queue. If yes, [0] will be played and removed
 var alertInterval = setInterval(function(){
-    if(alert_queue.length > 0 && alert_playing != true){
-        alert_playing = true;
+    if(pubsubAlerts.length > 0 && alertPlaying != true){
+        alertPlaying = true;
         startPubSubAlert()
     }
 }, 2500);
@@ -63,42 +63,42 @@ var alertInterval = setInterval(function(){
 // Update the object to the current alert. It also calls the function to finally show it
 function startPubSubAlert(){
             //Clear last object
-            alert_obj.title = null;
-            alert_obj.cost = null;
-            alert_obj.img = null;
-            alert_obj.default_img = null;
-            alert_obj.usermsg = null;
-            alert_obj.user = null;
+            pubsubAlertObj.title = null;
+            pubsubAlertObj.cost = null;
+            pubsubAlertObj.img = null;
+            pubsubAlertObj.defaultImg = null;
+            pubsubAlertObj.userMsg = null;
+            pubsubAlertObj.user = null;
             //Setup object
-            alert_obj.title = alert_queue[0].title;
-            alert_obj.cost = alert_queue[0].cost;
-            alert_obj.img = alert_queue[0].image;
-            alert_obj.default_img = alert_queue[0].default_image;
-            alert_obj.usermsg = alert_queue[0].user_input;
-            alert_obj.user = alert_queue[0].display_name;
+            pubsubAlertObj.title = pubsubAlerts[0].title;
+            pubsubAlertObj.cost = pubsubAlerts[0].cost;
+            pubsubAlertObj.img = pubsubAlerts[0].image;
+            pubsubAlertObj.defaultImg = pubsubAlerts[0].default_image;
+            pubsubAlertObj.userMsg = pubsubAlerts[0].user_input;
+            pubsubAlertObj.user = pubsubAlerts[0].display_name;
 
             setupAlert();
             // Remove alert from queue because it played
-            alert_queue.shift();
+            pubsubAlerts.shift();
 }
 
 // Function to show
 function setupAlert(){
 
-    var raw_msg = "@Model.alertSettings.msg"
-    raw_msg = raw_msg.replace("{user}", alert_obj.user)
-    raw_msg = raw_msg.replace("{item}", alert_obj.title)
-    raw_msg = raw_msg.replace("{price}", alert_obj.cost)
+    var rawMsg = "@Model.alertSettings.msg"
+    rawMsg = rawMsg.replace("{user}", pubsubAlertObj.user)
+    rawMsg = rawMsg.replace("{item}", pubsubAlertObj.title)
+    rawMsg = rawMsg.replace("{price}", pubsubAlertObj.cost)
 
     
-    var msg_label = document.getElementById("msg");
-    msg_label.innerHTML = ""
-    msg_label.append(document.createTextNode(raw_msg));
+    var alertMsgLabel = document.getElementById("alert-msg");
+    alertMsgLabel.innerHTML = ""
+    alertMsgLabel.append(document.createTextNode(rawMsg));
 
-    var usermsg_label = document.getElementById("user_msg")
-    usermsg_label.innerHTML = ""
-    if(alert_obj.usermsg != null){
-        usermsg_label.append(document.createTextNode('"' + alert_obj.usermsg + '"'))
+    var alertUserMsgLabel = document.getElementById("alert-user-msg")
+    alertUserMsgLabel.innerHTML = ""
+    if(pubsubAlertObj.userMsg != null){
+        alertUserMsgLabel.append(document.createTextNode('"' + pubsubAlertObj.userMsg + '"'))
     }
 
     var audio = new Audio("resources\\sounds\\" + "@Model.alertSettings.sound" + ".wav")
@@ -113,10 +113,10 @@ function setupAlert(){
         .fadeIn(1000);
     })
 
-    // Fadeout the alert from the value the client chose. alert_playing is now false again so next alert can play
+    // Fadeout the alert from the value the client chose. alertPlaying is now false again so next alert can play
     setTimeout(function(){ 
         jQuery(function(){
-            alert_playing = false;
+            alertPlaying = false;
             $('#alert').fadeOut(1000);
         }) 
     }, @Model.alertSettings.duration * 1000);
@@ -139,7 +139,7 @@ function checkForPubSubAlerts() {
                 }
                 json = JSON.parse(data)
                 for(var i = 0; i < json.length; i++){
-                    alert_queue.push(json[i]);
+                    pubsubAlerts.push(json[i]);
                 }
             }
     })

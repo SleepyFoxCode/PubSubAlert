@@ -34,9 +34,9 @@ namespace RazorPagesTwitchPubSub{
         }
         // Overload: CALL ONLY IF YOU ARE 100% SURE ACCESS_TOKEN IS VALID SINCE WE SKIP THE ACCESSTOKEN CHECK
         // This overload exists so we can call it without having the cookie in saved. (It takes a while until they are saved)
-        public CurrentUser(String access_token, IConfiguration _configuration){
-                information = TwitchHelper.LoadUserInformation(access_token, _configuration);
-                MyWebsocketHelper.UpdateUser(information.id, information.login, access_token);
+        public CurrentUser(String accessToken, IConfiguration _configuration){
+                information = TwitchHelper.LoadUserInformation(accessToken, _configuration);
+                MyWebsocketHelper.UpdateUser(information.id, information.login, accessToken);
         }
         public TwitchHelper.UserInformation information;    
 

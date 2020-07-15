@@ -18,13 +18,13 @@ namespace RazorPagesTwitchPubSub{
         static string oAuthTokenRefreshUrl = "https://id.twitch.tv/oauth2/token";
 
         // We check if the current access token is valid by calling the twitch token validation url
-        public static  Boolean AccessTokenIsValid(String access_token, IConfiguration _configuration){
-            if(access_token == String.Empty){
+        public static  Boolean AccessTokenIsValid(String accessToken, IConfiguration _configuration){
+            if(accessToken == String.Empty){
                 return false;
             }
             try{
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(oAuthTokenValidationUrl);
-                request.Headers.Add("Authorization", "OAuth " + access_token);
+                request.Headers.Add("Authorization", "OAuth " + accessToken);
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); 
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -43,21 +43,21 @@ namespace RazorPagesTwitchPubSub{
         }
 
         // We refresh tokens when access token doesn't work anymore by using the refresh token
-        public static TwitchJsonHelper.JsonRefresh RefreshTokens(String refresh_token, IConfiguration _configuration){
-            if(refresh_token==String.Empty) return null;
+        public static TwitchJsonHelper.JsonRefresh RefreshTokens(String refreshToken, IConfiguration _configuration){
+            if(refreshToken==String.Empty) return null;
             try{
-                string base_url = oAuthTokenRefreshUrl;
-                string grant_type = "refresh_token";
-                string client_id = _configuration["ClientId"];  // todo client id outsource
-                string client_secret = _configuration["SecretKey"]; // todo client_secret outsource
+                string baseUrl = oAuthTokenRefreshUrl;
+                string grantType = "refresh_token";
+                string clientId = _configuration["ClientId"];  // todo client id outsource
+                string clientSecret = _configuration["SecretKey"]; // todo client_secret outsource
                 TwitchJsonHelper.JsonRefresh jsonObj;
 
-                string complete_url = base_url 
-                + "?grant_type=" + grant_type 
-                + "&refresh_token=" + refresh_token 
-                + "&client_id=" + client_id 
-                + "&client_secret=" + client_secret;
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(complete_url);
+                string completeUrl = baseUrl 
+                + "?grant_type=" + grantType 
+                + "&refresh_token=" + refreshToken 
+                + "&client_id=" + clientId 
+                + "&client_secret=" + clientSecret;
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(completeUrl);
                 request.Method = "POST";
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 using(Stream stream = response.GetResponseStream()){
@@ -78,10 +78,10 @@ namespace RazorPagesTwitchPubSub{
         }
 
         // Gets user information by calling the new twitch api
-        public static UserInformation LoadUserInformation(String access_token, IConfiguration _configuration){
+        public static UserInformation LoadUserInformation(String accessToken, IConfiguration _configuration){
             try{
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(twitchNewAPIUrl + "users");
-                request.Headers.Add("Authorization", "Bearer " + access_token);
+                request.Headers.Add("Authorization", "Bearer " + accessToken);
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); // Todo: Outsource client id
 
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -102,6 +102,7 @@ namespace RazorPagesTwitchPubSub{
         }
 
 
+        // We can't change the name conventions of this class because we use this to deserialize json from the Twitch api
         public class UserInformation {
             public String id { get; set; }
             public String login { get; set; }

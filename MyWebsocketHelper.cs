@@ -16,12 +16,12 @@ namespace RazorPagesTwitchPubSub{
         
         // Updates the user.json file for this user. When we update the user, we take the content out of the file, append the new user, and put it back
         // Gets called when token gets refreshed or when user signs up
-        public static void UpdateUser(String id, String name, String access_token){
+        public static void UpdateUser(String id, String name, String accessToken){
 
             TwitchJsonHelper.JsonUpdateWS jsonObj = new TwitchJsonHelper.JsonUpdateWS();
             jsonObj.channel_id = id;
             jsonObj.login = name;
-            jsonObj.access_token = access_token;
+            jsonObj.access_token = accessToken;
             TwitchJsonHelper.JsonUpdateWSList jsonList = new TwitchJsonHelper.JsonUpdateWSList();
             
             // Read the old json file

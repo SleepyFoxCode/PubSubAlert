@@ -28,10 +28,10 @@ namespace RazorPagesTwitchPubSub.Pages
             alertSettings = new AlertSettings();
             alertSettings.msg = HttpContext.Request.Query["msg"];
             alertSettings.duration = HttpContext.Request.Query["duration"];
-            alertSettings.url = HttpContext.Request.Query["image"];
-            alertSettings.font_size_msg = HttpContext.Request.Query["fontsizemsg"] + "em";
+            alertSettings.url = HttpContext.Request.Query["img"];
+            alertSettings.font_size_msg = HttpContext.Request.Query["fontsize"] + "em";
             alertSettings.font_family = HttpContext.Request.Query["fontfamily"];
-            alertSettings.font_color_msg = "#" + HttpContext.Request.Query["fontcolormsg"];
+            alertSettings.font_color_msg = "#" + HttpContext.Request.Query["fontcolor"];
             alertSettings.sound = HttpContext.Request.Query["sound"];
             alertSettings.volume = HttpContext.Request.Query["volume"];
 

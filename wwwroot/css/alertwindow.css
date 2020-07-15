@@ -1,4 +1,4 @@
-#main {
+#main{
     background-color: rgb(0, 255, 0);
     height: 100%;
     width: 100%;
@@ -7,14 +7,14 @@
     left: 0;
 }
 
-.image{
+#alert-image{
     margin-left: auto;
     margin-right: auto;
     max-width: 400px;
     max-height: 300px;
 }
 
-#alert {
+#alert{
     margin-right: auto;
     margin-left: auto;
     width: max-content;
@@ -28,10 +28,23 @@
     word-break: break-all;
 }
 
-#msg{
+#alert-msg{
     max-width: 400px;
     word-break: break-all;
     font-style: italic;
+    font-weight: bold;
+    word-break: break-word;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#alert_user_msg{
+    word-break: break-word;
+    font-style:italic;
+    margin-left:auto;
+    margin-right: auto;
+    font-size:1.7em;
+
 }
 
 #costs{
