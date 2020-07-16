@@ -5,8 +5,8 @@
 
 # My Changes
 appsettings.json
-PubSubWebsocket/data/*.json
-PubSubWebsocket/data/alert/*.json
+data/*.json
+data/alert/*.json
 log/*.txt
 
 
