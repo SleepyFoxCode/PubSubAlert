@@ -10,12 +10,55 @@ a.navbar-brand {
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
+  font-family: Roboto, Verdana;
+}
+
+.navbar{
+  background-color: #8FE5B4;
+  padding: unset;
+}
+
+.navbar a {
+  color: #FFF;
+  padding-top: 0.5em;
+  font-family: Fredoka One, josefin sans, arial;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  font-size: 1.1rem;
+}
+
+.nav-link:hover{
+  color: #000;
+}
+
+#navbar-logged-in-as {
+}
+
+.navbar-logged-in-as-img {
+  height: 1em;
 }
 
 .btn-primary {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  background-color: #D08288;
+  border-color: #D08288;
+}
+
+.btn-primary:hover{
+  background-color: #bb6176;
+  border-color: #bb6176;
+  color: #fff;
+}
+
+.btn-info {
+  background-color: #519194;
+  border-color: #519194;
+  color: #fff;
 }
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -61,22 +104,43 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  background-color: #FFF;
+  font-family: Fredoka One, josefin sans, arial;
 }
+
+
+body p {
+  font-family: Roboto, Verdana;
+}
+
+label {
+  font-family: Roboto, Verdana;
+}
+
+span {
+  font-family: Roboto, Verdana;
+}
+
+input {
+  font-family: Roboto, Verdana;
+}
+
+.btn {
+  font-family: Roboto, Verdana;
+}
+
+select {
+  font-family: Roboto, Verdana;
+}
+
+footer {
+  font-family: Roboto, Verdana;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
-}
-
-
-/* MY EDITS */
-
-#navbar-logged-in-as {
-
-}
-
-.navbar-logged-in-as-img {
-  height: 1em;
 }
