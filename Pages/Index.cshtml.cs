@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
 
-namespace RazorPagesTwitchPubSub.Pages
+namespace PubSubAlert.Pages
 {
     public class IndexModel : PageModel
     {

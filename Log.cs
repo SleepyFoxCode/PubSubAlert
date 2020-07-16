@@ -2,7 +2,8 @@ using System;
 using System.IO;
 
 
-namespace RazorPagesTwitchPubSub{
+namespace PubSubAlert
+{
     public class Log{
 
         static string diretory = "log\\";

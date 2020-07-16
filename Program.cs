@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 
-namespace RazorPagesTwitchPubSub
+namespace PubSubAlert
 {
     public class Program
     {

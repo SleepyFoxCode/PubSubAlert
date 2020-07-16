@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 
 
 
-namespace RazorPagesTwitchPubSub{
+namespace PubSubAlert
+{
 
     public class CurrentUser{
 

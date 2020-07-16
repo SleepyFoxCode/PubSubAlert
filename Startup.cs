@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 
 
 
-namespace RazorPagesTwitchPubSub
+namespace PubSubAlert
 {
     public class Startup
     {
@@ -61,7 +61,6 @@ namespace RazorPagesTwitchPubSub
             {
                 endpoints.MapRazorPages();
             });
-
         }
     }
 }

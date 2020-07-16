@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // Those classes can serialize and deserialize object data from the Twitch Api. We can't change the name convention
 
 
-namespace RazorPagesTwitchPubSub{
+namespace PubSubAlert{
 
     public class TwitchJsonHelper{
 

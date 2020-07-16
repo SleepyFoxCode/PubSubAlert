@@ -5,9 +5,8 @@ using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
 
-
-
-namespace RazorPagesTwitchPubSub{
+namespace PubSubAlert
+{
 
     public class TwitchHelper{
 

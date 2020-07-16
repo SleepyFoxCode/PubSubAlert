@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 
 
-namespace RazorPagesTwitchPubSub.Pages
+namespace PubSubAlert.Pages
 {
     public class DashboardModel : PageModel{
 

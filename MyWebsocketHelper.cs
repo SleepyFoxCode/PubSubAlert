@@ -4,7 +4,8 @@ using System.Text.Json;
 using System.Collections.Generic;
 
 
-namespace RazorPagesTwitchPubSub{
+namespace PubSubAlert
+{
 
     class MyWebsocketHelper{
         
@@ -53,9 +54,6 @@ namespace RazorPagesTwitchPubSub{
                 }
             }
         }
-
-
-
 
         // This gets all pubsubs that were fetched from the websocket (Path decides if alert or event)
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubs(string id, string path){
