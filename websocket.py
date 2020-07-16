@@ -79,6 +79,11 @@ def write_pubsub_file(json_obj, channel_id, folder):
 
     #This json will be dumped in the end to the file
     updated_json_obj = None
+
+    #If folder doesn't exist, create it
+    if not os.path.isdir(folder):
+        os.mkdir(folder)
+
     # if channel id file not exist we need to create it
     if not os.path.exists(folder + channel_id + ".json"):
         newFile = open(folder + channel_id + ".json", "w")
