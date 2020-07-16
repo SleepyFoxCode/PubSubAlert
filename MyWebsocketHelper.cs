@@ -9,7 +9,7 @@ namespace RazorPagesTwitchPubSub{
     class MyWebsocketHelper{
         
         // Data of the websocket. Here we store alerts, events, users
-        public static string websocketDataPath = "PubSubWebsocket/data/";
+        public static string websocketDataPath = "data/";
         public static string websocketDataPathAlert = websocketDataPath + "alert/";
         public static string websocketDataPathTesting = websocketDataPath + "testing/";
         static string userFileName = "users.json";
