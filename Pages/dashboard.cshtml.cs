@@ -14,7 +14,7 @@ namespace PubSubAlert.Pages
 {
     public class DashboardModel : PageModel{
 
-        public CurrentUser user;
+        public CurrentUser User;
         public IConfiguration _configuration;
         public DashboardModel(IConfiguration configuration)
         {
@@ -22,9 +22,9 @@ namespace PubSubAlert.Pages
         }
 
         public IActionResult OnGet(){
-            user = new CurrentUser(this.HttpContext, _configuration);
-            if(user.information == null) return Redirect("https://id.twitch.tv/oauth2/authorize?client_id=" + _configuration["ClientId"] + "&redirect_uri=https://" + _configuration["Host"] + "/dashboard?handler=redirect&response_type=code&scope=channel:read:redemptions+user:read:email");
-            MyWebsocketHelper.ClearPubSubFile(user.information.id, MyWebsocketHelper.websocketDataPath);
+            User = new CurrentUser(this.HttpContext, _configuration);
+            if(User.Information == null) return Redirect("https://id.twitch.tv/oauth2/authorize?client_id=" + _configuration["ClientId"] + "&redirect_uri=https://" + _configuration["Host"] + "/dashboard?handler=redirect&response_type=code&scope=channel:read:redemptions+user:read:email");
+            MyWebsocketHelper.ClearPubSubFile(User.Information.id, MyWebsocketHelper.WebsocketDataPath);
 
             return null;
         }
@@ -61,13 +61,13 @@ namespace PubSubAlert.Pages
                 Response.Cookies.Append("access_token", jsonUserAuth.access_token, options);
                 Response.Cookies.Append("refresh_token", jsonUserAuth.refresh_token, options);
                 
-                user = new CurrentUser(jsonUserAuth.access_token, _configuration);
-                if(user.information == null){
+                User = new CurrentUser(jsonUserAuth.access_token, _configuration);
+                if(User.Information == null){
                     Response.Cookies.Delete("access_token");
                     Response.Cookies.Delete("refresh_token");
                     throw new Exception("User.information was null in OnGetRedirect in Authentication");
                 }
-                MyWebsocketHelper.UpdateUser(user.information.id, user.information.login, jsonUserAuth.access_token);
+                MyWebsocketHelper.UpdateUser(User.Information.id, User.Information.login, jsonUserAuth.access_token);
             }
             catch(Exception e){
                 Log.WriteToLog(e.ToString());
@@ -79,10 +79,10 @@ namespace PubSubAlert.Pages
 
         // This gets called from the html file every x seconds
         public IActionResult OnPostGetNewPubSubs(){
-            user = new CurrentUser(this.HttpContext, _configuration);
-            if(user.information == null) return new JsonResult("Error");
+            User = new CurrentUser(this.HttpContext, _configuration);
+            if(User.Information == null) return new JsonResult("Error");
 
-            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(user.information.id, MyWebsocketHelper.websocketDataPath);
+            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(User.Information.id, MyWebsocketHelper.WebsocketDataPath);
             if(pubSubList == null) return new JsonResult("Error");
             if(pubSubList.Count < 1) return new JsonResult("Error");
 
@@ -103,16 +103,16 @@ namespace PubSubAlert.Pages
                 events.Add(pubSubObj);
             }
             // Return to ajax request
-            MyWebsocketHelper.ClearPubSubFile(user.information.id, MyWebsocketHelper.websocketDataPath);
+            MyWebsocketHelper.ClearPubSubFile(User.Information.id, MyWebsocketHelper.WebsocketDataPath);
             return new JsonResult(JsonSerializer.Serialize(events));
         }
         public IActionResult OnPostGetNewPubSubsTest(){
 
-            user = new CurrentUser(this.HttpContext, _configuration);
-            if(user.information == null) return new JsonResult("Error");
+            User = new CurrentUser(this.HttpContext, _configuration);
+            if(User.Information == null) return new JsonResult("Error");
 
             // This adds a testing alert to the official alert file for alert window
-            MyWebsocketHelper.GetPubSubAlertsTest(user.information.id);
+            MyWebsocketHelper.GetPubSubAlertsTest(User.Information.id);
 
             // This creates a test event for the dashboard from a testfile
             List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubEventsTest();

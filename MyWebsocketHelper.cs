@@ -10,10 +10,11 @@ namespace PubSubAlert
     class MyWebsocketHelper{
         
         // Data of the websocket. Here we store alerts, events, users
-        public static string websocketDataPath = "data/";
-        public static string websocketDataPathAlert = websocketDataPath + "alert/";
-        public static string websocketDataPathTesting = websocketDataPath + "testing/";
-        static string userFileName = "users.json";
+        public static string WebsocketDataPath = "data/";
+        public static string WebsocketDataPathAlert = WebsocketDataPath + "alert/";
+        private static string WebsocketDataPathTesting = WebsocketDataPath + "testing/";
+        private static string UserFileName = "users.json";
+
         
         // Updates the user.json file for this user. When we update the user, we take the content out of the file, append the new user, and put it back
         // Gets called when token gets refreshed or when user signs up
@@ -26,8 +27,8 @@ namespace PubSubAlert
             TwitchJsonHelper.JsonUpdateWSList jsonList = new TwitchJsonHelper.JsonUpdateWSList();
             
             // Read the old json file
-            if(!File.Exists(websocketDataPath + userFileName)) CreateFile(websocketDataPath + userFileName);
-            using (FileStream fs = new FileStream(websocketDataPath + userFileName, FileMode.Create)){
+            if(!File.Exists(WebsocketDataPath + UserFileName)) CreateFile(WebsocketDataPath + UserFileName);
+            using (FileStream fs = new FileStream(WebsocketDataPath + UserFileName, FileMode.Create)){
                 try{
                 StreamReader reader = new StreamReader(fs);
                 string text = reader.ReadToEnd();
@@ -77,8 +78,8 @@ namespace PubSubAlert
         public static List<TwitchJsonHelper.JsonPubSubRoot> GetPubSubEventsTest(){
             // We need to create a file if the websocket never fetched an alert before
             List<TwitchJsonHelper.JsonPubSubRoot> list = new List<TwitchJsonHelper.JsonPubSubRoot>();
-            if(!File.Exists(websocketDataPathTesting + "test.json")) CreateFile(websocketDataPathTesting + "test.json");
-            using(FileStream fs = new FileStream(websocketDataPathTesting + "test.json", FileMode.Open)){
+            if(!File.Exists(WebsocketDataPathTesting + "test.json")) CreateFile(WebsocketDataPathTesting + "test.json");
+            using(FileStream fs = new FileStream(WebsocketDataPathTesting + "test.json", FileMode.Open)){
                 try{
                     StreamReader reader = new StreamReader(fs);
                     string text = reader.ReadToEnd();
@@ -97,15 +98,15 @@ namespace PubSubAlert
         // We can't use the same approach as in the GetPubSubEventTest because we have no button on the window
         public static void GetPubSubAlertsTest(string id){
             // We need to create a file if the websocket never fetched an alert before
-            if(!File.Exists(websocketDataPathTesting + "alert/" + "test.json")) CreateFile(websocketDataPathTesting + "alert/" + "test.json");
-            using(FileStream fs = new FileStream(websocketDataPathTesting + "alert/" + "test.json", FileMode.Open)){
+            if(!File.Exists(WebsocketDataPathTesting + "alert/" + "test.json")) CreateFile(WebsocketDataPathTesting + "alert/" + "test.json");
+            using(FileStream fs = new FileStream(WebsocketDataPathTesting + "alert/" + "test.json", FileMode.Open)){
                 try{
                     StreamReader reader = new StreamReader(fs);
                     string text = reader.ReadToEnd();
                     if(text == String.Empty) throw new Exception("Testfile is empty"); 
 
-                    if(!File.Exists(websocketDataPath + "alert/" + id + ".json")) CreateFile(websocketDataPath + "alert/" + id + ".json");
-                    using(FileStream fs_second = new FileStream(websocketDataPath + "alert/" + id + ".json", FileMode.Open)){
+                    if(!File.Exists(WebsocketDataPath + "alert/" + id + ".json")) CreateFile(WebsocketDataPath + "alert/" + id + ".json");
+                    using(FileStream fs_second = new FileStream(WebsocketDataPath + "alert/" + id + ".json", FileMode.Open)){
                         try{
                             StreamWriter writer = new StreamWriter(fs_second);
                             writer.Write(text);

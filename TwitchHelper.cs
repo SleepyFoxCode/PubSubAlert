@@ -9,12 +9,10 @@ namespace PubSubAlert
 {
 
     public class TwitchHelper{
-
-        //private readonly IConfiguration _configuration;
         
-        static string oAuthTokenValidationUrl = "https://id.twitch.tv/oauth2/validate";
-        static string twitchNewAPIUrl = "https://api.twitch.tv/helix/";
-        static string oAuthTokenRefreshUrl = "https://id.twitch.tv/oauth2/token";
+        static private string OAuthTokenValidationUrl = "https://id.twitch.tv/oauth2/validate";
+        static private string TwitchNewAPIUrl = "https://api.twitch.tv/helix/";
+        static private string OAuthTokenRefreshUrl = "https://id.twitch.tv/oauth2/token";
 
         // We check if the current access token is valid by calling the twitch token validation url
         public static  Boolean AccessTokenIsValid(String accessToken, IConfiguration _configuration){
@@ -22,7 +20,7 @@ namespace PubSubAlert
                 return false;
             }
             try{
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(oAuthTokenValidationUrl);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(OAuthTokenValidationUrl);
                 request.Headers.Add("Authorization", "OAuth " + accessToken);
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); 
 
@@ -49,7 +47,7 @@ namespace PubSubAlert
         public static TwitchJsonHelper.JsonRefresh RefreshTokens(String refreshToken, IConfiguration _configuration){
             if(refreshToken==String.Empty) return null;
             try{
-                string baseUrl = oAuthTokenRefreshUrl;
+                string baseUrl = OAuthTokenRefreshUrl;
                 string grantType = "refresh_token";
                 string clientId = _configuration["ClientId"];  // todo client id outsource
                 string clientSecret = _configuration["SecretKey"]; // todo client_secret outsource
@@ -83,7 +81,7 @@ namespace PubSubAlert
         // Gets user information by calling the new twitch api
         public static UserInformation LoadUserInformation(String accessToken, IConfiguration _configuration){
             try{
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(twitchNewAPIUrl + "users");
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(TwitchNewAPIUrl + "users");
                 request.Headers.Add("Authorization", "Bearer " + accessToken);
                 request.Headers.Add("Client-ID", _configuration["ClientId"]); // Todo: Outsource client id
 

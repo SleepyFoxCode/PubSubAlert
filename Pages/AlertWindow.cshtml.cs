@@ -16,24 +16,24 @@ namespace PubSubAlert.Pages
         {
             _configuration = configuration;
         }
-        public AlertSettings alertSettings;
+        public AlertSettings AlertSettings;
         // Since we can't have cookies in obs we need to get the user_id from our dashboard
         public string id;      
 
         public IActionResult OnGet(){
             id = HttpContext.Request.Query["id"];
             // Clear the alert file from our websocket when we open the window (or refresh it)
-            MyWebsocketHelper.ClearPubSubFile(id, MyWebsocketHelper.websocketDataPathAlert);
+            MyWebsocketHelper.ClearPubSubFile(id, MyWebsocketHelper.WebsocketDataPathAlert);
             // Setting up an object for the settings the user set for the alert. We get them from url 
-            alertSettings = new AlertSettings();
-            alertSettings.msg = HttpContext.Request.Query["msg"];
-            alertSettings.duration = HttpContext.Request.Query["duration"];
-            alertSettings.url = HttpContext.Request.Query["img"];
-            alertSettings.fontSize = HttpContext.Request.Query["fontsize"] + "em";
-            alertSettings.fontFamily = HttpContext.Request.Query["fontfamily"];
-            alertSettings.fontColor = "#" + HttpContext.Request.Query["fontcolor"];
-            alertSettings.sound = HttpContext.Request.Query["sound"];
-            alertSettings.volume = HttpContext.Request.Query["volume"];
+            AlertSettings = new AlertSettings();
+            AlertSettings.msg = HttpContext.Request.Query["msg"];
+            AlertSettings.duration = HttpContext.Request.Query["duration"];
+            AlertSettings.url = HttpContext.Request.Query["img"];
+            AlertSettings.fontSize = HttpContext.Request.Query["fontsize"] + "em";
+            AlertSettings.fontFamily = HttpContext.Request.Query["fontfamily"];
+            AlertSettings.fontColor = "#" + HttpContext.Request.Query["fontcolor"];
+            AlertSettings.sound = HttpContext.Request.Query["sound"];
+            AlertSettings.volume = HttpContext.Request.Query["volume"];
 
             return null;
         }
@@ -41,7 +41,7 @@ namespace PubSubAlert.Pages
         // This gets called from the html file every x seconds   
         public IActionResult OnPostGetNewPubSubs(){
             // Get all alerts to play from our websocket file
-            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(HttpContext.Request.Query["id"], MyWebsocketHelper.websocketDataPathAlert);
+            List<TwitchJsonHelper.JsonPubSubRoot> pubSubList = MyWebsocketHelper.GetPubSubs(HttpContext.Request.Query["id"], MyWebsocketHelper.WebsocketDataPathAlert);
             if(pubSubList == null) return new JsonResult("Error");
             if(pubSubList.Count < 1) return new JsonResult("Error");
 
@@ -62,7 +62,7 @@ namespace PubSubAlert.Pages
                 events.Add(pubSubObj);
             }
             // After getting all alerts from our websocket file we clear it. Important: If an alert happens in this function the alert will be destroyed
-            MyWebsocketHelper.ClearPubSubFile(HttpContext.Request.Query["id"], MyWebsocketHelper.websocketDataPathAlert);
+            MyWebsocketHelper.ClearPubSubFile(HttpContext.Request.Query["id"], MyWebsocketHelper.WebsocketDataPathAlert);
             // We return the json file with all the alerts. It returns a json with a list
             return new JsonResult(JsonSerializer.Serialize(events));
         }

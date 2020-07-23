@@ -9,6 +9,8 @@ namespace PubSubAlert
 
     public class CurrentUser{
 
+        public TwitchHelper.UserInformation Information; 
+
         public CurrentUser(HttpContext ctx, IConfiguration _configuration){
             if(!TwitchHelper.AccessTokenIsValid(ctx.Request.Cookies["access_token"], _configuration)){
                 TwitchJsonHelper.JsonRefresh refreshObj;
@@ -25,21 +27,19 @@ namespace PubSubAlert
                     
                     ctx.Response.Cookies.Append("access_token", refreshObj.access_token, options);
                     ctx.Response.Cookies.Append("refresh_token", refreshObj.refresh_token, options);
-                    information = TwitchHelper.LoadUserInformation(refreshObj.access_token, _configuration);
-                    MyWebsocketHelper.UpdateUser(information.id, information.login, refreshObj.access_token);
+                    Information = TwitchHelper.LoadUserInformation(refreshObj.access_token, _configuration);
+                    MyWebsocketHelper.UpdateUser(Information.id, Information.login, refreshObj.access_token);
                 }
             }
             else {
-                information = TwitchHelper.LoadUserInformation(ctx.Request.Cookies["access_token"], _configuration);
+                Information = TwitchHelper.LoadUserInformation(ctx.Request.Cookies["access_token"], _configuration);
             }
         }
         // Overload: CALL ONLY IF YOU ARE 100% SURE ACCESS_TOKEN IS VALID SINCE WE SKIP THE ACCESSTOKEN CHECK
         // This overload exists so we can call it without having the cookie in saved. (It takes a while until they are saved)
         public CurrentUser(String accessToken, IConfiguration _configuration){
-                information = TwitchHelper.LoadUserInformation(accessToken, _configuration);
-                MyWebsocketHelper.UpdateUser(information.id, information.login, accessToken);
-        }
-        public TwitchHelper.UserInformation information;    
-
+                Information = TwitchHelper.LoadUserInformation(accessToken, _configuration);
+                MyWebsocketHelper.UpdateUser(Information.id, Information.login, accessToken);
+        }   
     }
 }

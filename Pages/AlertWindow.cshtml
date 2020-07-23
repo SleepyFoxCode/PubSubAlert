@@ -31,9 +31,9 @@
 @Html.AntiForgeryToken()
     <div id="main">
         <div id="alert">
-            <img id="alert-image" src="@Model.alertSettings.url"/>
-            <label id="alert-msg" style="color:@Model.alertSettings.fontColor; font-size:@Model.alertSettings.fontSize; font-family:@Model.alertSettings.fontFamily;"></label>    
-            <label id="alert-user-msg" style="font-size:@Model.alertSettings.fontSize; color:@Model.alertSettings.fontColor; font-family:@Model.alertSettings.fontFamily;"></label>        
+            <img id="alert-image" src="@Model.AlertSettings.url"/>
+            <label id="alert-msg" style="color:@Model.AlertSettings.fontColor; font-size:@Model.AlertSettings.fontSize; font-family:@Model.AlertSettings.fontFamily;"></label>    
+            <label id="alert-user-msg" style="font-size:@Model.AlertSettings.fontSize; color:@Model.AlertSettings.fontColor; font-family:@Model.AlertSettings.fontFamily;"></label>        
         </div>
     </div>
 </body>
@@ -95,7 +95,7 @@ function startPubSubAlert(){
 // Function to show
 function setupAlert(){
 
-    var rawMsg = "@Model.alertSettings.msg"
+    var rawMsg = "@Model.AlertSettings.msg"
     rawMsg = rawMsg.replace("{user}", pubsubAlertObj.user)
     rawMsg = rawMsg.replace("{item}", pubsubAlertObj.title)
     rawMsg = rawMsg.replace("{price}", pubsubAlertObj.cost)
@@ -111,8 +111,8 @@ function setupAlert(){
         alertUserMsgLabel.append(document.createTextNode('"' + pubsubAlertObj.userMsg + '"'))
     }
 
-    var audio = new Audio("resources\\sounds\\" + "@Model.alertSettings.sound" + ".wav")
-    audio.volume = @Model.alertSettings.volume
+    var audio = new Audio("resources\\sounds\\" + "@Model.AlertSettings.sound" + ".wav")
+    audio.volume = @Model.AlertSettings.volume
     audio.play()
 
     // We want the alert to be a flex box. This is a workaround so the Query function doesn't change display:flex to display:block
@@ -129,7 +129,7 @@ function setupAlert(){
             alertPlaying = false;
             $('#alert').fadeOut(1000);
         }) 
-    }, @Model.alertSettings.duration * 1000);
+    }, @Model.AlertSettings.duration * 1000);
 }
 
 

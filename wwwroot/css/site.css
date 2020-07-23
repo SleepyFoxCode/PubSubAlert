@@ -1,46 +1,43 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+body {
+  /* Margin bottom by footer height */
+  background-color: #FFF;
+  font-family: Roboto, Verdana;
+}
+
+
+body p {
+  font-family: Roboto, Verdana;
+}
+
+body h1{
+  font-family: Fredoka One, josefin sans, arial;
+}
+
+body h2{
+  font-family: Fredoka One, josefin sans, arial;
+}
+
+body h3{
+  font-family: Fredoka One, josefin sans, arial;
 }
 
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;
   font-family: Roboto, Verdana;
-}
-
-.navbar{
-  background-color: #8FE5B4;
-  padding: unset;
-}
-
-.navbar a {
-  color: #FFF;
-  padding-top: 0.5em;
-  font-family: Fredoka One, josefin sans, arial;
-}
-
-.navbar-brand {
-  font-size: 1.5rem;
-}
-
-.nav-link {
-  font-size: 1.1rem;
-}
-
-.nav-link:hover{
-  color: #000;
-}
-
-#navbar-logged-in-as {
-}
-
-.navbar-logged-in-as-img {
-  height: 1em;
 }
 
 .btn-primary {
@@ -61,23 +58,6 @@ a {
   color: #fff;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
@@ -94,53 +74,71 @@ button.accept-policy {
   line-height: inherit;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
+.navbar{
+  background-color: #61cc8f;
+  padding: unset;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  background-color: #FFF;
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+.navbar a {
+  color: #FFF;
+  padding-top: 0.5em;
   font-family: Fredoka One, josefin sans, arial;
 }
 
-
-body p {
-  font-family: Roboto, Verdana;
+.nav-container{
+  margin-left: 1em;
 }
 
-label {
-  font-family: Roboto, Verdana;
+.navbar-brand {
+  font-size: 1.5rem;
 }
 
-span {
-  font-family: Roboto, Verdana;
+.nav-link {
+  font-size: 1.1rem;
 }
 
-input {
-  font-family: Roboto, Verdana;
+.nav-link:hover{
+  color: #000;
 }
 
-.btn {
-  font-family: Roboto, Verdana;
+@media (min-width: 768px){
+  #navbar-logged-in-as {
+    position: absolute;
+    left: 80%;
+  }
 }
 
-select {
-  font-family: Roboto, Verdana;
+@media (max-width: 767px){
+  #navbar-logged-in-as {
+    display:none;
+  }
 }
 
-footer {
-  font-family: Roboto, Verdana;
+.navbar-logged-in-as-img {
+  height: 1em;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
 }
 
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+  text-align: center;
+}
+
+.footer p{
+  word-break: break-all;
+  width: 100%;
+  overflow: overlay;
 }
