@@ -18,12 +18,12 @@ namespace PubSubAlert.Pages
         }
         public AlertSettings AlertSettings;
         // Since we can't have cookies in obs we need to get the user_id from our dashboard
-        public string id;      
+        public string Id;      
 
         public IActionResult OnGet(){
-            id = HttpContext.Request.Query["id"];
+            Id = HttpContext.Request.Query["id"];
             // Clear the alert file from our websocket when we open the window (or refresh it)
-            MyWebsocketHelper.ClearPubSubFile(id, MyWebsocketHelper.WebsocketDataPathAlert);
+            MyWebsocketHelper.ClearPubSubFile(Id, MyWebsocketHelper.WebsocketDataPathAlert);
             // Setting up an object for the settings the user set for the alert. We get them from url 
             AlertSettings = new AlertSettings();
             AlertSettings.msg = HttpContext.Request.Query["msg"];

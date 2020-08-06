@@ -137,7 +137,7 @@ function setupAlert(){
 function checkForPubSubAlerts() {
     $.ajax({
             type: "POST",
-            url: 'alertwindow?handler=GetNewPubSubs&id=@Model.id', 
+            url: 'alertwindow?handler=GetNewPubSubs&id=@Model.Id', 
             contentType: "application/x-www-form-urlencoded",
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("XSRF-TOKEN",

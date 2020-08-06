@@ -36,10 +36,10 @@
                     </li>
                 </ul>
             </div>
-            @if(Model.user != null){
+            @if(Model.UserObject != null){
             <div id="navbar-logged-in-as">
-                Logged in as: @Model.user.information.display_name
-                <img src="@Model.user.information.profile_image_url" class="navbar-logged-in-as-img">
+                Logged in as: @Model.UserObject.Information.display_name
+                <img src="@Model.UserObject.Information.profile_image_url" class="navbar-logged-in-as-img">
             </div>
             }
 

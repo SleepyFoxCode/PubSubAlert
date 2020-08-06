@@ -9,7 +9,7 @@
 @Html.AntiForgeryToken()
 <div id="main" class="col-md-12">
     <div id="welcome-container">
-        <h1>Welcome @Model.User.Information.display_name!</h1>
+        <h1>Welcome @Model.UserObject.Information.display_name!</h1>
         <p>
             This page enables you to see all incoming redemptions on your channel. <br>
             Try it out by redeeming something to yourself! <br>
@@ -108,7 +108,7 @@
 var pubsubNotifications = [];
 
 // DOCUMENT READY
-
+    
 // We check the localstorage if settings are saved from earlier
 $(document).ready(function() {
     restoreAlertSettings()
@@ -181,6 +181,7 @@ document.getElementById("alertwindow-settings-soundplay-btn").addEventListener("
 // Listener for button to save all settings for the alert in the localstorage
 document.getElementById("alertwindow-settings-save-btn").addEventListener("click", function(){
     saveAlertSettings();
+    alert("Settings saved.")
 }, false)
 
 // Listener for button to restore all settings back to the saved ones in the localstorage
@@ -201,6 +202,7 @@ document.getElementById('testalert-send-btn').addEventListener("click", function
         beforeSend: function (xhr) {
             xhr.setRequestHeader("XSRF-TOKEN",
                 $('input:hidden[name="__RequestVerificationToken"]').val());
+            alert("Sent test alert.")
         },
         success: function(data){
             var json = []
@@ -286,7 +288,7 @@ function openAlertWindow(){
     "&fontcolor=" + alertFontcolorVal +
     "&sound=" + alertSoundSelectionVal +
     "&volume=" + alertSoundVolumeVal +
-    "&id=" + @Model.User.Information.id
+    "&id=" + @Model.UserObject.Information.id
 
     window.open(urlString, "targetWindow", 'toolbar=no, status=no, menubar=no, scrollbars=no, resizable=yes, width=800, height=600');
 }

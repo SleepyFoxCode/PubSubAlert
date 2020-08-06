@@ -5,7 +5,7 @@ namespace PubSubAlert.Pages
 {
     public class PrivacyModel : PageModel
     {
-        public CurrentUser user;
+        public CurrentUser UserObject = null;
         private readonly ILogger<PrivacyModel> _logger;
 
         public PrivacyModel(ILogger<PrivacyModel> logger)

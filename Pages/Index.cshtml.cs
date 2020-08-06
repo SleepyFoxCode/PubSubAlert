@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace PubSubAlert.Pages
 {
@@ -11,7 +12,7 @@ namespace PubSubAlert.Pages
         {
             _configuration = configuration;
         }
-        public CurrentUser user;
+        public CurrentUser UserObject = null;
         public void OnGet()
         {
 

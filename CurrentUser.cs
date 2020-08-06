@@ -22,7 +22,8 @@ namespace PubSubAlert
 
                     var options = new CookieOptions
                     {
-                        IsEssential = true
+                        IsEssential = true,
+                        Secure = true
                     };
                     
                     ctx.Response.Cookies.Append("access_token", refreshObj.access_token, options);
